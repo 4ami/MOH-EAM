@@ -1,0 +1,135 @@
+{
+    "splash_title": "نظام إدارة أصول المؤسسات (فرع وزارة الصحة - نجران)",
+    "splash_initializing": "يتم تهيئة النظام",
+    "splash_checking_auth": "جاري المصادقة",
+    "splash_authenticating": "تمت المصادقة بنجاح",
+    "splash_success": "أهلاً بعودتك $name",
+    "language_switch_title": "لغة العرض",
+    "language_switch_ar":"العربية",
+    "language_switch_en":"الإنجليزية",
+    "authentication_needed_message": "سيتم إعادة توجيهك لصفحة الدخول",
+    "http_error_message": "خطأ في الاتصال بالشبكة. يرجى المحاولة مرة أخرى.",
+    "network_error_message": "انتهت مهلة الطلب. يرجى فحص اتصالك.",
+    "general_error_message": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+    "signin_title": "تسجيل الدخول",
+    "signin_username_label": "اسم المستخدم",
+    "signin_password_label": "كلمة المرور",
+    "signin_button_title": "دخول",
+    "field_required": "هذا الحقل مطلوب",
+    "field_value_too_long": "القيمة المدخلة طويلة جداً",
+    "english_letters_numbers_policy": "هذا الحقل يتطلب أحرف انجيليزية وارقام فقط",
+    "password_length_policy": "كلمة المرور يجب أن تكون اطول من 8 خانات",
+    "password_letters_policy": "يجب أن تتكون كلمة المرور من حروف",
+    "password_uppercase_policy": "يجب أن تتكون كلمة المرور من حرف كبير على الأقل",
+    "password_two_digits_policy": "يجب أن تحتوي كلمة المرور على رقمين على الأقل",
+    "password_special_policy": "يجب أن تحتوي كلمة المرور على رموز",
+
+    "system_prefrence_section": "تفضيلات النظام",
+    "system_apperance": "مظهر النظام: $mode",
+    "dark_mode": "الوضع الليلي",
+    "light_mode": "الوضع النهاري",
+    "system_language": "لغة النظام",
+
+    "user_account_section": "الحساب",
+    "greeting_user": "مرحباً $name",
+    "user_profile": "الملف الشخصي",
+
+    "system_sctions": "أقسام النظام",
+    "users_section": "المستخدمين",
+    "roles_section": "أدوار المستخدمين",
+    "departments_section": "الأقسام",
+    "devices_section": "الأجهزة",
+
+    "technical_support": "الدعم الفني",
+    "sign_out": "تسجيل الخروج",
+
+    "search_bar_hint": "ابحث عن مستخدم أو جهاز",
+    "search_bar_label": "بحث",
+    "quick_access": "الوصول السريع",
+    "users_quick_access": "إدارة المستخدمين",
+    "devices_quick_access": "إدارة الأجهزة والأصول",
+    "departments_quick_access": "إدارة أقسام فرع الوزارة",
+    "dashboard_visuals": "الرسومات البيانية في لوحة التحكم",
+
+    "auth_not_registered_404": "المستخدم غير موجود في النظام",
+    "auth_invalid_credentials_400": "اسم المستخدم أو كلمة المرور غير صحيحة",
+    "auth_username_registered_400": "اسم المستخدم مسجل بالفعل",
+    "auth_user_info_registered_400": "بيانات التواصل مرتبطة بحساب آخر",
+    "invalid_department_id_400": "القسم غير صحيح أو غير موجود",
+
+    "parent_department_not_found_404": "لا يمكن إضافة قسم جديد تحت قسم غير موجود",
+    "department_not_found_404": "القسم غير موجود",
+    "conflicting_hierarchy_parameters_400": "لا يمكن إنشاء قسم كقسم رئيسي وضمن قسم آخر في الوقت نفسه",
+    "circular_reference_error_400": "لا يمكن ادراج قسم ضمن نفسه",
+    "circular_hierarchy_error_400": "لا يمكن وضع قسم ضمن الأقسام التابعة له",
+    "delete_department_404": "لايمكن حذف قسم غير مسجل",
+
+    "device_serial_exist": "الرقم التسلسلي للجهاز مسجل بالفعل",
+    "invalid_user_id": "لايمكن ربط الجهاز بهذا المستخدم - بيانات المستخدم غير صحيحة",
+    "id": "المعرف",
+    "username": "اسم المستخدم",
+    "email": "البريد الإلكتروني",
+    "mobile": "رقم الجوال",
+    "full_name_ar": "الاسم الكامل (عربي)",
+    "full_name_en": "الاسم الكامل (إنجليزي)",
+    "role": "الدور",
+    "permissions": "الصلاحيات",
+    "department": "القسم",
+    "show_more": "عرض المزيد",
+    "show_more_details": "عرض التفاصيل",
+
+    "go_home": "العودة للصفحة الرئيسية",
+    "retry": "إعادة المحاولة",
+    "default_navigation_error_message": "لم نتمكن من العثور على ما تبحث عنه. لا تقلق، يحدث ذلك لأفضلنا.",
+    "error_page_title": "خطأ في النظام",
+    
+    "insufficient_permissions": "ليس لديك الصلاحيات الكافية للوصول",
+
+    "users_card_title": "بطاقة المستخدم",
+    "devices_card_title": "بطاقة الجهاز",
+    "departments_card_title": "بطاقة القسم",
+
+    "users_details": "تفاصيل المستخدم",
+    "devices_details": "تفاصيل الجهاز",
+    "departments_details": "تفاصيل القسم",
+
+    "edit_action": "تعديل",
+    "delete_action": "حذف",
+    
+    "devices": "الأجهزة",
+    "users": "المستخدمين",
+    "departments": "الأقسام",
+    "roles": "الأدوار",
+
+    "delete_confirmation_title": "تأكيد الحذف",
+    "delete_confirmation_message": "هل أنت متأكد أنك تريد حذف هذا العنصر؟ هذا الإجراء لا يمكن التراجع عنه.",
+    "cancel_action": "إلغاء",
+
+    "save_changes": "حفظ التغييرات",
+    "save": "حفظ",
+
+    "select_role": "اختر الدور",
+    "select_department": "اختر القسم",
+    "select_devices": "اختر الأجهزة",
+
+    "filter_by_devices_owned": "تصفية حسب الأجهزة المملوكة",
+    "has_devices_filter": "لديه أجهزة",
+    "has_no_devices_filter": "ليس لديه أجهزة",
+
+    "filter_by_department": "تصفية حسب القسم",
+    "filter_by_role": "تصفية حسب الدور",
+
+    "name": "الاسم",
+    "level_name": "اسم المستوى الإداري",
+    "level": "المستوى الإداري",
+    "parent_id": "القسم المرجعي",
+    "extra": "معلومات إضافية",
+
+    "search": "بحث",
+
+    "total_users": "إجمالي المستخدمين",
+    "total_devices": "إجمالي الأجهزة",
+
+    "search_filter": "تصفية",
+    "empty_result": "لم يتم العثور على نتائج تطابق بحثك"
+}

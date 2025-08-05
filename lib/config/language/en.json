@@ -1,0 +1,136 @@
+{
+    "splash_title": "Enterprise Assets Management System (Ministry of Health Branch - Najran)",
+    "splash_initializing": "Initializing the application",
+    "splash_checking_auth": "Pending for authentication",
+    "splash_authenticating": "Authentication succeed",
+    "splash_success": "Welcome back $name",
+    "language_switch_title": "Display Language",
+    "language_switch_ar":"Arabic",
+    "language_switch_en":"English",
+    "authentication_needed_message": "You will be redirected to sign in form",
+    "http_error_message": "Network connection error. Please try again.",
+    "network_error_message": "Request timeout. Please check your connection.",
+    "general_error_message": "Something went wrong. Please try again.",
+    "signin_title": "Signin",
+    "signin_username_label": "Username",
+    "signin_password_label": "Password",
+    "signin_button_title": "Sign In",
+    "field_required": "This field is required.",
+    "field_value_too_long": "The entered value is too long.",
+    "english_letters_numbers_policy": "This field accepts English letters and numbers only.",
+    "password_length_policy": "Password must be longer than 8 characters.",
+    "password_letters_policy": "Password must contain letters.",
+    "password_uppercase_policy": "Password must include at least one uppercase letter.",
+    "password_two_digits_policy": "Password must contain at least two digits.",
+    "password_special_policy": "Password must include at least one special character.",
+    "system_prefrence_section": "System Prefrences",
+
+    "system_apperance": "System Apperance: $mode",
+    "dark_mode": "Night mode",
+    "light_mode": "Day mode",
+    "system_language": "System Language",
+
+    "user_account_section": "Account",
+    "greeting_user": "Welcome $name",
+    "user_profile": "Profile",
+
+    "system_sctions": "System Sections",
+    "users_section": "Users",
+    "roles_section": "Roles",
+    "departments_section": "Departments",
+    "devices_section": "Devices",
+
+    "technical_support": "Technical Support",
+    "sign_out": "Sign Out",
+
+    "search_bar_hint": "Search for a user or device",
+    "search_bar_label": "Search",
+    "quick_access": "Quick Access",
+    "users_quick_access": "Users Managment",
+    "devices_quick_access": "Devices Managment",
+    "departments_quick_access": "MOH-Najran Branch Managment",
+    "dashboard_visuals": "Dashboard Visuals",
+
+    "auth_not_registered_404": "User does not exist in the system",
+    "auth_invalid_credentials_400": "Incorrect username or password",
+    "auth_username_registered_400": "Username is already registered",
+    "auth_user_info_registered_400": "Contact information is linked to another account",
+    "invalid_department_id_400": "Invalid or non-existent department",
+    
+    "parent_department_not_found_404": "Cannot add a new department under a non-existent parent",
+    "department_not_found_404": "Department not found",
+    "conflicting_hierarchy_parameters_400": "Cannot create a department as both a parent and a sub-department simultaneously",
+    "circular_reference_error_400": "A department cannot be assigned to itself",
+    "circular_hierarchy_error_400": "A department cannot be placed under one of its own sub-departments",
+    "delete_department_404": "Cannot delete a non-existent department",
+
+    "device_serial_exist": "Device serial number already exists",
+    "invalid_user_id": "Cannot assign device to this user - user data is invalid",
+    
+    "id": "ID",
+    "username": "Username",
+    "email": "Email",
+    "mobile": "Mobile Number",
+    "full_name_ar": "Full Name (Arabic)",
+    "full_name_en": "Full Name (English)",
+    "role": "Role",
+    "permissions": "Permissions",
+    "department": "Department",
+    "show_more": "Show More",
+    "show_more_details": "Show Details",
+
+    "go_home": "Go Back to Home Page",
+    "retry": "Retry",
+    "default_navigation_error_message": "We couldn't find what you're looking for. Don't worry, it happens to the best of us.",
+    "error_page_title": "Oops! Something went wrong",
+    
+    "insufficient_permissions": "You do not have sufficient permissions",
+
+    "users_card_title": "User Card",
+    "devices_card_title": "Device Card",
+    "departments_card_title": "Department Card",
+
+    "users_details": "User Details",
+    "devices_details": "Device Details",
+    "departments_details": "Department Details",
+
+    "edit_action": "Edit",
+    "delete_action": "Delete",
+
+    "devices": "Devices",
+    "users": "Users",
+    "departments": "Departments",
+    "roles": "Roles",
+
+    "delete_confirmation_title": "Delete Confirmation",
+    "delete_confirmation_message": "Are you sure you want to delete this item? This action cannot be undone.",
+    "cancel_action": "Cancel",
+
+    "save_changes": "Save Changes",
+    "save": "Save",
+
+    "select_role": "Select Role",
+    "select_department": "Select Department",
+    "select_devices": "Select Devices",
+
+    "filter_by_devices_owned": "Filter by Owned Devices",
+    "has_devices_filter": "Has Devices",
+    "has_no_devices_filter": "Has No Devices",
+
+    "filter_by_department": "Filter by Department",
+    "filter_by_role": "Filter by Role",
+
+    "name": "Name",
+    "level_name": "Administrative Level Name",
+    "level": "Administrative Level",
+    "parent_id": "Reference Department",
+    "extra": "Additional Information",
+
+    "search": "Search",
+
+    "total_users": "Total Users",
+    "total_devices": "Total Devices",
+
+    "search_filter": "Filter",
+    "empty_result": "There is no results match your search"
+}

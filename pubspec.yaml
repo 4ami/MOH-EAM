@@ -1,0 +1,50 @@
+name: moh_eam
+description: "MOH Enterprise Asset Management"
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  dio: ^5.8.0+1
+  fl_chart: ^1.0.0
+  flutter:
+    sdk: flutter
+
+  flutter_bloc: ^9.1.1
+  flutter_localization: ^0.3.3
+  flutter_secure_storage: ^9.2.4
+  flutter_web_plugins:
+    sdk: flutter
+  go_router: ^16.0.0
+  hive: ^2.2.3
+  jwt_decoder: ^2.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
+    - assets/icons/
+    - assets/fonts/
+    - lib/config/.env/
+    - lib/config/language/
+  
+  fonts:
+    - family: IBM_EN
+      fonts:
+        - asset: assets/fonts/IBM_Plex_Sans/static/IBMPlexSans_Condensed-Regular.ttf
+        - asset: assets/fonts/IBM_Plex_Sans/static/IBMPlexSans_SemiCondensed-Bold.ttf
+          weight: 700
+    
+    - family: IBM_AR
+      fonts:
+        - asset: assets/fonts/IBMPlexSans-Regular.ttf
+        - asset: assets/fonts/IBMPlexSans-Bold.ttf
+          weight: 700
