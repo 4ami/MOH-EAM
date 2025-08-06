@@ -1,5 +1,5 @@
 import 'package:moh_eam/core/domain/entity/entity_model.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
 class DeviceEntity extends EntityModel {
   final String id, serial, model, type;

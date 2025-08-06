@@ -7,7 +7,7 @@ import 'package:moh_eam/config/logging/logger.dart';
 import 'package:moh_eam/core/data/model/api_error.dart';
 import 'package:moh_eam/features/auth/data/models/auth_model.dart';
 import 'package:moh_eam/features/auth/data/repositories/auth_repo_implementation.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 import 'package:moh_eam/features/auth/domain/repositories/auth_repo.dart';
 import 'package:moh_eam/features/auth/domain/services/sign_in_service.dart';
 import 'package:moh_eam/features/auth/domain/services/sign_out_service.dart';

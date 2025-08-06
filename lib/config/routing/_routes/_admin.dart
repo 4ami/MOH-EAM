@@ -14,7 +14,9 @@ final class _Admin implements _RouteInterface {
         return NoTransitionPage(
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<DepartmentBloc>(create: (context)=> DepartmentBloc()),
+              BlocProvider<DepartmentBloc>(
+                create: (context) => DepartmentBloc(),
+              ),
               BlocProvider<AdminBloc>(
                 create: (context) {
                   AdminBloc bloc = AdminBloc();
@@ -131,7 +133,17 @@ final class _Admin implements _RouteInterface {
       path: AppRoutesInformation.departmentManagment.path,
       name: AppRoutesInformation.departmentManagment.name,
       pageBuilder: (context, state) {
-        return NoTransitionPage(child: DepartmentsView());
+        return NoTransitionPage(
+          child: BlocProvider<DepartmentBloc>(
+            create: (context) {
+              var auth = context.read<AuthBloc>().state as AuthenticatedState;
+              var lang = context.read<LanguageCubit>().state.languageCode;
+              var event = DepartmentFetchRootsEvent(token: auth.token, lang: lang);
+              return DepartmentBloc()..add(event);
+            },
+            child: DepartmentView(),
+          ),
+        );
       },
     ),
 

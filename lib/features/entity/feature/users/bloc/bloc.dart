@@ -9,7 +9,7 @@ import 'package:moh_eam/features/entity/feature/users/data/repositories/users_en
 import 'package:moh_eam/features/entity/feature/users/domain/repositories/user_repository.dart';
 import 'package:moh_eam/features/entity/feature/users/domain/services/fetch_user_details.dart';
 import 'package:moh_eam/features/entity/feature/users/domain/services/fetch_users.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
 part 'state.dart';
 part 'event.dart';

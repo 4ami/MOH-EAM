@@ -1,4 +1,4 @@
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
 abstract class AdminTableRowData {
   AdminTableRowData({this.selected = false});

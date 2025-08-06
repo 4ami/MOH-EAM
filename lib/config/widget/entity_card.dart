@@ -52,6 +52,7 @@ class EntityCard<T extends EntityModel> extends StatelessWidget {
       children: props.map((prop) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
           children: [
             SelectableText(
               '${context.translate(key: prop)}:',

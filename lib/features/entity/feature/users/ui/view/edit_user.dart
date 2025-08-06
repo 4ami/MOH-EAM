@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moh_eam/config/widget/widget_module.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 import 'package:moh_eam/features/entity/feature/users/ui/widgets/users_widgets_module.dart';
 
 class EditUserPage extends StatefulWidget {

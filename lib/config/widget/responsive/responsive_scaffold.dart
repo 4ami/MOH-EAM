@@ -26,23 +26,19 @@ class ResponsiveScaffold extends StatelessWidget {
     );
   }
 
-  Widget? _buildFAB(ResponsiveInfo info) {
-    if (floatingActionButton == null) return null;
-    return SizedBox(
-      width: info.fabSize,
-      height: info.fabSize,
-      child: floatingActionButton,
-    );
-  }
+  // Widget? _buildFAB(ResponsiveInfo info) {
+  //   if (floatingActionButton == null) return null;
+  //   return SizedBox(
+  //     width: info.fabSize,
+  //     height: info.fabSize,
+  //     child: floatingActionButton,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, info) {
-        Logger.i(
-          'Responsive Scaffold built for [${info.deviceType}]',
-          tag: 'Responsive[Scaffold]',
-        );
         return Scaffold(
           backgroundColor: backgroundColor,
           appBar: appBar != null ? _buildAppBar(info) : null,
@@ -54,7 +50,7 @@ class ResponsiveScaffold extends StatelessWidget {
               child: ResponsiveLayout(center: centered, child: body),
             ),
           ),
-          floatingActionButton: _buildFAB(info),
+          floatingActionButton: floatingActionButton,
           bottomNavigationBar: info.isMobile ? bottomNavigationBar : null,
         );
       },

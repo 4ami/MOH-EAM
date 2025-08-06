@@ -1,5 +1,6 @@
 import 'package:moh_eam/core/data/sources/remote/moh_api.dart';
 import 'package:moh_eam/core/data/sources/remote/moh_dio_client.dart';
+import 'package:moh_eam/features/entity/feature/users/data/model/create_user.dart';
 import 'package:moh_eam/features/entity/feature/users/data/model/fetch_user_details_model.dart';
 import 'package:moh_eam/features/entity/feature/users/data/model/fetch_users_model.dart';
 import 'package:moh_eam/features/entity/feature/users/domain/repositories/user_repository.dart';
@@ -50,5 +51,23 @@ final class UsersEntityRepositoryImp implements UsersEntityRepository {
       token: token,
       parser: (json) => FetchUserDetailsModel.fromJSON(json),
     );
+  }
+
+  @override
+  Future<CreateUserResponse> create({
+    required String token,
+    required CreateUserRequest user,
+  }) async {
+    return await _client.post(
+      endpoint: MohAppConfig.api.userCREATE.replaceAll('\$version', version),
+      body: user,
+      token: token,
+      parser: (json) => CreateUserResponse.fromJSON(json),
+    );
+  }
+
+  @override
+  Future<void> update({required String token}) {
+    throw UnimplementedError();
   }
 }

@@ -10,7 +10,7 @@ import 'package:moh_eam/core/domain/entity/entity_model.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/entity/department.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 import 'package:moh_eam/features/entity/ui/widgets/entity_widgets_module.dart';
 
 export 'widgets/entity_widgets_module.dart';

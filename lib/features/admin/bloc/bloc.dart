@@ -12,7 +12,7 @@ import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dar
 import 'package:moh_eam/features/auth/domain/entities/role.dart';
 import 'package:moh_eam/features/admin/domain/repositories/data_repository.dart';
 import 'package:moh_eam/features/admin/domain/services/dashboard_service.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -87,7 +87,6 @@ final class AdminBloc extends Bloc<AdminEvent, AdminState> {
       final List<DepartmentEntity> deptRoots = depts.departments
           .map((d) => d.toDomain())
           .toList();
-      Logger.d(deptRoots.length.toString());
       Logger.i('Fetching Admin dashboard success.', tag: '[AdminBloc]');
       emit(
         state.copyWith(

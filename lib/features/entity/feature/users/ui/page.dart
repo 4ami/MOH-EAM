@@ -14,7 +14,8 @@ import 'package:moh_eam/config/widget/widget_module.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/ui/view/create_user.dart';
 
 export 'widgets/users_widgets_module.dart';
 
@@ -34,6 +35,18 @@ class _UsersViewState extends State<UsersView> {
         appBar: _appBar(context.isMobile),
         drawer: Drawer(child: AdminDrawerBody()),
         body: _layout(),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) => CreateUserWidget(),
+            );
+          },
+          label: Text(context.translate(key: 'create_user_btn_label')),
+          icon: Icon(Icons.add),
+        ),
       ),
     );
   }
@@ -121,7 +134,7 @@ class _UsersViewState extends State<UsersView> {
     }
     if (state.event is UserEntitySuccessEvent) {
       if (state.users.isEmpty) {
-        return Text(context.translate(key: 'empty_result'), style: context.h3,);
+        return Text(context.translate(key: 'empty_result'), style: context.h3);
       }
       return EntityTable<UserEntity>(
         entities: state.users,

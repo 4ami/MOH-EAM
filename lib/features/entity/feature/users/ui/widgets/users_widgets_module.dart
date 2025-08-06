@@ -10,7 +10,7 @@ import 'package:moh_eam/features/auth/domain/entities/role.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/entity/department.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
 
 part 'edit_user_form.dart';

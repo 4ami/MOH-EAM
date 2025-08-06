@@ -132,5 +132,26 @@
     "total_devices": "Total Devices",
 
     "search_filter": "Filter",
-    "empty_result": "There is no results match your search"
+    "empty_result": "There is no results match your search",
+
+    "create_user_btn_label": "Add New User",
+
+    "full_name_invalid_fromat": "Invalid full name format",
+    "email_invalid_format": "Invalid email format",
+    "mobile_invalid_format": "Invalid mobile format",
+
+    "confirm_password_field_label": "Confirm Password",
+    "confirm_password_does_not_match": "Does not match the entered password",
+
+    "generate_password_checkbox_label": "Generate Random Password",
+    "generated_password_value_field": "Generated Password",
+
+    "add_user_btn": "Add New User",
+
+    
+    "department_view_title": "Organization Departments",
+    "add_new_department": "Add New Department",
+    "failed_to_load": "Failed To Load",
+    "no_departments_found": "No Departments Found",
+    "add_first_department": "Add The First Department"
 }

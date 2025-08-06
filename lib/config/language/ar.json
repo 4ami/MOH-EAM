@@ -131,5 +131,25 @@
     "total_devices": "إجمالي الأجهزة",
 
     "search_filter": "تصفية",
-    "empty_result": "لم يتم العثور على نتائج تطابق بحثك"
+    "empty_result": "لم يتم العثور على نتائج تطابق بحثك",
+
+    "create_user_btn_label": "إضافة مستخدم جديد",
+
+    "full_name_invalid_fromat": "صيغة الاسم غير صحيحة",
+    "email_invalid_format": "صيغة البريد غير صحيحة",
+    "mobile_invalid_format":"صيغة الهاتف غير صحيحة",
+    
+    "confirm_password_field_label": "تأكيد كلمة المرور",
+    "confirm_password_does_not_match": "كلمة المرور غير مطابقة",
+
+    "generate_password_checkbox_label": "توليد كلمة مرور عشوائية",
+    "generated_password_value_field": "كلمة المرور المُولدة",
+
+    "add_user_btn": "إضافة مستخدم جديد",
+    
+    "department_view_title": "أقسام المؤسسة",
+    "add_new_department": "إضافة قسم جديد",
+    "failed_to_load": "فشل التحميل",
+    "no_departments_found": "لم يتم العثور على أقسام",
+    "add_first_department": "أضف القسم الأول"
 }

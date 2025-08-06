@@ -1,6 +1,7 @@
 import 'package:moh_eam/core/data/sources/remote/moh_api.dart';
 import 'package:moh_eam/core/data/sources/remote/moh_dio_client.dart';
 import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_children.dart';
+import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_departments_root_model.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/repositories/department_repo.dart';
 
 final class DepartmentRepoImplementation implements DepartmentRepo {
@@ -22,6 +23,20 @@ final class DepartmentRepoImplementation implements DepartmentRepo {
           .replaceAll('\$department', parent),
       token: token,
       parser: (json) => FetchDepartmentChildren.fromJSON(json),
+    );
+  }
+
+  @override
+  Future<FetchDepartmentsRootModel> roots({
+    required String token,
+    String lang = 'ar',
+  }) async {
+    return await _client.get(
+      token: token,
+      endpoint: _api.departmentsRoot
+          .replaceAll('\$version', version)
+          .replaceAll('\$lang', lang),
+      parser: (json) => FetchDepartmentsRootModel.fromJSON(json),
     );
   }
 }

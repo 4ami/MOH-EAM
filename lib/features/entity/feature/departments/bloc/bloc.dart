@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moh_eam/config/logging/logger.dart';
 import 'package:moh_eam/core/data/model/api_error.dart';
 import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_children.dart';
+import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_departments_root_model.dart';
 import 'package:moh_eam/features/entity/feature/departments/data/repositories/department_repository_implementation.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/entity/department.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/repositories/department_repo.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/service/children.dart';
+import 'package:moh_eam/features/entity/feature/departments/domain/service/roots.dart';
 
 part 'state.dart';
 part 'event.dart';
@@ -16,6 +18,7 @@ final class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
   final DepartmentRepo _repo = DepartmentRepoImplementation();
   DepartmentBloc() : super(const DepartmentState()) {
     _fetchChildren();
+    _fetchRoots();
   }
 
   String handleError(dynamic e) {
@@ -63,6 +66,49 @@ final class DepartmentBloc extends Bloc<DepartmentEvent, DepartmentState> {
         state.copyWith(
           event: const DepartmentSuccessEvent(),
           children: childrenModel.children.map((e) => e.toDomain()).toList(),
+        ),
+      );
+    });
+  }
+
+  void _fetchRoots() {
+    FetchDepartmentsRootModel? then(FetchDepartmentsRootModel res) {
+      if (res.code != 200) throw res.messageKey;
+      return res;
+    }
+
+    on<DepartmentFetchRootsEvent>((event, emit) async {
+      emit(state.copyWith(event: DepartmentLoadingEvent()));
+      Logger.d('Start fetching roots', tag: 'DepartmentBloc');
+
+      String key = '';
+      DepartmentRoots service = DepartmentRoots(_repo);
+
+      FetchDepartmentsRootModel? deptsModel = await service
+          .call(token: event.token, lang: event.lang)
+          .then(then)
+          .catchError((e) {
+            key = handleError(e);
+            return null;
+          });
+
+      Logger.d('Fetching roots response received', tag: 'DepartmentBloc');
+      if (key.isNotEmpty || deptsModel == null) {
+        Logger.e(
+          'Fetching roots failed with key [$key]',
+          tag: 'DepartmentBloc',
+        );
+        emit(state.copyWith(event: DepartmentFailedEvent(message: key)));
+        return;
+      }
+      Logger.i(
+        'Fetching roots succeed (${deptsModel.departments.length}/department)',
+        tag: 'DepartmentBloc',
+      );
+      emit(
+        state.copyWith(
+          event: DepartmentSuccessEvent(),
+          departments: deptsModel.departments.map((e) => e.toDomain()).toList(),
         ),
       );
     });

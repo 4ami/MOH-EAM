@@ -13,6 +13,11 @@ final class DepartmentLoadingEvent extends DepartmentEvent {
   const DepartmentLoadingEvent();
 }
 
+final class DepartmentFetchRootsEvent extends DepartmentEvent {
+  const DepartmentFetchRootsEvent({required this.token, this.lang ='ar'});
+  final String token, lang;
+}
+
 final class DepartmentRequestChildren extends DepartmentEvent {
   final String token, parent;
   const DepartmentRequestChildren({required this.token, required this.parent});

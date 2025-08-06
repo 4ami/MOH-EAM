@@ -32,4 +32,46 @@ class ValidationHelper {
     }
     return null;
   }
+
+  static String? fullName(String? n, BuildContext context) {
+    if (n == null || n.isEmpty || n.trim().isEmpty) {
+      return context.translate(key: 'field_required');
+    }
+    var pattern = RegExp(r'^[A-Za-z\u0600-\u06FF\s]+$');
+    if (!pattern.hasMatch(n) || n.length > 50) {
+      return context.translate(key: 'full_name_invalid_fromat');
+    }
+    return null;
+  }
+
+  static String? email(String? e, BuildContext context) {
+    if (e == null || e.isEmpty) return context.translate(key: 'field_required');
+    if (e.length > 255) return context.translate(key: 'email_invalid_format');
+
+    var pattern = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    if (!pattern.hasMatch(e)) {
+      return context.translate(key: 'email_invalid_format');
+    }
+    return null;
+  }
+
+  static String? mobile(String? m, BuildContext context) {
+    if (m == null || m.isEmpty) return context.translate(key: 'field_required');
+    if (m.length > 9) return context.translate(key: 'mobile_invalid_format');
+
+    var pattern = RegExp(r'^\+?[0-9]\d{9,13}$');
+    if (!pattern.hasMatch(m)) {
+      return context.translate(key: 'mobile_invalid_format');
+    }
+    return null;
+  }
+
+  static String? confirmPassword(String? cp, String? p, BuildContext context) {
+    var policyCheck = password(cp, context);
+    if (policyCheck != null) return policyCheck;
+    if (cp != p) {
+      return context.translate(key: 'confirm_password_does_not_match');
+    }
+    return null;
+  }
 }

@@ -3,7 +3,7 @@ import 'package:moh_eam/features/entity/feature/departments/data/model/departmen
 import 'package:moh_eam/features/auth/data/models/roles.dart';
 import 'package:moh_eam/features/auth/domain/entities/role.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/entity/department.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
 class UserModel extends BaseResponse {
   const UserModel({

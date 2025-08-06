@@ -19,6 +19,8 @@ class DepartmentEntity extends EntityModel {
   @override
   String get resourceName => 'departmenta';
 
+  static List<String> get tableCols => ['id', 'dept_name', 'level_name'];
+
   @override
   List<String> get columns => ['id', 'dept_name', 'level_name'];
 

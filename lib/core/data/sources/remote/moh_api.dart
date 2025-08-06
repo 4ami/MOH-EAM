@@ -80,6 +80,8 @@ abstract class APIConfig {
 
   String get usersFetch;
   String get userDetails;
+  String get userCREATE;
+  String get userUPDATE;
 
   /// Load and prepare any necessary configuration resources.
   ///
@@ -225,6 +227,12 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
 
   @override
   String get userDetails => get(key: 'USERS.FETCH_DETAILS');
+
+  @override
+  String get userCREATE => get(key: 'AUTH.create_user');
+
+  @override
+  String get userUPDATE => get(key: 'USERS.UPDATE');
 }
 
 /// Production environment implementation of [APIConfig].
@@ -298,6 +306,12 @@ final class _$Production implements APIConfig {
 
   @override
   String get userDetails => String.fromEnvironment('USER_DETAILS');
+
+  @override
+  String get userCREATE => String.fromEnvironment('CREATE_USER');
+
+  @override
+  String get userUPDATE => String.fromEnvironment('UPDATE_USER');
 }
 
 /// Utility to determine the active [Environment] at runtime.
