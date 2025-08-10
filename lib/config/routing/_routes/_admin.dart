@@ -138,13 +138,46 @@ final class _Admin implements _RouteInterface {
             create: (context) {
               var auth = context.read<AuthBloc>().state as AuthenticatedState;
               var lang = context.read<LanguageCubit>().state.languageCode;
-              var event = DepartmentFetchRootsEvent(token: auth.token, lang: lang);
+              var event = DepartmentFetchRootsEvent(
+                token: auth.token,
+                lang: lang,
+              );
               return DepartmentBloc()..add(event);
             },
             child: DepartmentView(),
           ),
         );
       },
+      routes: [
+        GoRoute(
+          path: AppRoutesInformation.viewDepartment.path,
+          name: AppRoutesInformation.viewDepartment.name,
+          pageBuilder: (context, state) {
+            var parent = state.pathParameters['department'];
+            if (parent == null) {
+              Logger.e(
+                'Department Details Viewer requires department id in path params',
+                tag: 'DepartmentViewer',
+              );
+              //redirect to ErrorPage
+              return const NoTransitionPage(child: ErrorPage());
+            }
+            var lang = context.read<LanguageCubit>().state.languageCode;
+            var auth = context.read<AuthBloc>().state as AuthenticatedState;
+            var event = DepartmentRequestSubtree(
+              token: auth.token,
+              parent: parent,
+              lang: lang
+            );
+            return NoTransitionPage(
+              child: BlocProvider<DepartmentBloc>(
+                create: (context) => DepartmentBloc()..add(event),
+                child: DepartmentViewer(),
+              ),
+            );
+          },
+        ),
+      ],
     ),
 
     GoRoute(

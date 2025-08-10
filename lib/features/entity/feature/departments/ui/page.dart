@@ -2,13 +2,18 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moh_eam/config/logging/logger.dart';
+import 'package:moh_eam/config/routing/_helpers/_routing_helpers_module.dart';
 import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
 import 'package:moh_eam/config/widget/widget_module.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
+import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/entity/department.dart';
+import 'package:moh_eam/features/entity/feature/departments/ui/view/create_department.dart';
+import 'package:moh_eam/features/entity/feature/departments/ui/view/update_department.dart';
 
 class DepartmentView extends StatefulWidget {
   const DepartmentView({super.key});
@@ -20,14 +25,81 @@ class DepartmentView extends StatefulWidget {
 class _DepartmentViewState extends State<DepartmentView> {
   @override
   Widget build(BuildContext context) {
+    bool canCreate = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'departments',
+      'CREATE',
+    );
     return ResponsiveScaffold(
       appBar: _appBar(context.isMobile),
-      body: _layout(),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _onAddDepartment,
-        icon: Icon(Icons.add),
-        label: Text(context.translate(key: 'add_new_department')),
+      body: BlocListener<DepartmentBloc, DepartmentState>(
+        listener: (context, state) {
+          if (state.event is DeleteDepartmentSuccess) {
+            context.successToast(
+              title: context.translate(
+                key: 'delete_department_success_notification_title',
+              ),
+              description: context.translate(
+                key: 'delete_department_success_notification_desc',
+              ),
+            );
+            return;
+          }
+
+          if (state.event is DepartmentDeleteFailedEvent) {
+            String desc = context.translate(
+              key: 'delete_department_failed_notification_desc',
+            );
+            String reason = context.translate(key: state.event.message);
+            desc = desc.replaceAll('\$reason', reason);
+
+            context.errorToast(
+              title: context.translate(
+                key: 'delete_department_failed_notification_title',
+              ),
+              description: desc,
+            );
+            return;
+          }
+
+          if (state.event is UpdateDepartmentSuccess) {
+            context.successToast(
+              title: context.translate(
+                key: 'update_department_success_notification_title',
+              ),
+              description: context.translate(
+                key: 'update_department_success_notification_desc',
+              ),
+            );
+            return;
+          }
+
+          if (state.event is DepartmentUpdateFailedEvent) {
+            String desc = context.translate(
+              key: 'update_department_failed_notification_desc',
+            );
+            String reason = context.translate(key: state.event.message);
+            desc = desc.replaceAll('\$reason', reason);
+            context.errorToast(
+              title: context.translate(
+                key: 'update_department_failed_notification_title',
+              ),
+              description: desc,
+            );
+            return;
+          }
+        },
+        child: _layout(),
       ),
+      floatingActionButton: canCreate ? _addDepartment(context) : null,
+    );
+  }
+
+  FloatingActionButton _addDepartment(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: _onAddDepartment,
+      icon: Icon(Icons.add),
+      label: Text(context.translate(key: 'add_new_department')),
     );
   }
 
@@ -92,28 +164,40 @@ class _DepartmentViewState extends State<DepartmentView> {
   }
 
   Widget _buildActionButtons(DepartmentEntity department) {
+    bool enabled =
+        context.watch<DepartmentBloc>().state.event is! DepartmentLoadingEvent;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton(
-          onPressed: () => _onEditDepartment(department),
-          icon: Icon(Icons.edit),
-          tooltip: context.translate(key: 'edit_action'),
-          style: IconButton.styleFrom(
-            backgroundColor: context.primaryContainer,
-            foregroundColor: context.onPrimaryContainer,
+        if (AuthorizationHelper.hasMinimumPermission(
+          context,
+          'departments',
+          'UPDATE',
+        ))
+          IconButton(
+            onPressed: enabled ? () => _onEditDepartment(department) : null,
+            icon: Icon(Icons.edit),
+            tooltip: context.translate(key: 'edit_action'),
+            style: IconButton.styleFrom(
+              backgroundColor: context.primaryContainer,
+              foregroundColor: context.onPrimaryContainer,
+            ),
           ),
-        ),
         SizedBox(width: 8),
-        IconButton(
-          onPressed: () => _onDeleteDepartment(department),
-          icon: Icon(Icons.delete),
-          tooltip: context.translate(key: 'delete_action'),
-          style: IconButton.styleFrom(
-            backgroundColor: context.errorContainer,
-            foregroundColor: context.onErrorContainer,
+        if (AuthorizationHelper.hasMinimumPermission(
+          context,
+          'departments',
+          'DELETE',
+        ))
+          IconButton(
+            onPressed: enabled ? () => _onDeleteDepartment(department) : null,
+            icon: Icon(Icons.delete),
+            tooltip: context.translate(key: 'delete_action'),
+            style: IconButton.styleFrom(
+              backgroundColor: context.errorContainer,
+              foregroundColor: context.onErrorContainer,
+            ),
           ),
-        ),
       ],
     );
   }
@@ -302,11 +386,10 @@ class _DepartmentViewState extends State<DepartmentView> {
   }
 
   void _onDepartmentTap(DepartmentEntity department) {
-    // Navigate to DepartmentDetailsView
-    // context.pushNamed(
-    //   'department_details', // Replace with your actual route name
-    //   pathParameters: {"departmentId": department.id},
-    // );
+    context.pushNamed(
+      AppRoutesInformation.viewDepartment.name,
+      pathParameters: {"department": department.id},
+    );
   }
 
   void _onEditDepartment(DepartmentEntity department) {
@@ -314,16 +397,31 @@ class _DepartmentViewState extends State<DepartmentView> {
     Logger.d('Edit department: ${department.id}', tag: 'DepartmentView');
     // You can navigate to edit page or show edit dialog
     // context.pushNamed('edit_department', pathParameters: {"departmentId": department.id});
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return BlocProvider<DepartmentBloc>(
+          create: (_) => DepartmentBloc(),
+          child: UpdateDepartmentWidget(department: department),
+        );
+      },
+    );
   }
 
   void _onDeleteDepartment(DepartmentEntity department) {
+    String key = department.level == 0
+        ? 'delete_root_confirmation_message'
+        : 'delete_root_confirmation_message';
     // Show confirmation dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(context.translate(key: 'delete_confirmation_title')),
-          content: Text(context.translate(key: 'delete_confirmation_message')),
+          content: Text(context.translate(key: key)),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -347,13 +445,23 @@ class _DepartmentViewState extends State<DepartmentView> {
     // Handle actual deletion
     Logger.d('Delete department: ${department.id}', tag: 'DepartmentView');
     // Add your deletion logic here
-    // context.read<DepartmentBloc>().add(DeleteDepartmentEvent(department.id));
+    var auth = context.read<AuthBloc>().state as AuthenticatedState;
+    context.read<DepartmentBloc>().add(
+      DeleteDepartmentEvent(token: auth.token, departmentId: department.id),
+    );
   }
 
   void _onAddDepartment() {
-    // Navigate to add department page
     Logger.d('Add new department', tag: 'DepartmentView');
-    // context.pushNamed('add_department');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => BlocProvider<DepartmentBloc>(
+        create: (context) => DepartmentBloc(),
+        child: CreateDepartmentWidget(),
+      ),
+    );
   }
 
   void _onSearchQueryChanged(String? query) {

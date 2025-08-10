@@ -29,25 +29,34 @@ class UsersView extends StatefulWidget {
 class _UsersViewState extends State<UsersView> {
   @override
   Widget build(BuildContext context) {
+    bool canCreate = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'users',
+      'CREATE',
+    );
     return BlocListener<UserEntityBloc, UserEntityState>(
       listener: _listener,
       child: ResponsiveScaffold(
         appBar: _appBar(context.isMobile),
         drawer: Drawer(child: AdminDrawerBody()),
         body: _layout(),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (context) => CreateUserWidget(),
-            );
-          },
-          label: Text(context.translate(key: 'create_user_btn_label')),
-          icon: Icon(Icons.add),
-        ),
+        floatingActionButton: canCreate ? _addUser(context) : null,
       ),
+    );
+  }
+
+  FloatingActionButton _addUser(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => CreateUserWidget(),
+        );
+      },
+      label: Text(context.translate(key: 'create_user_btn_label')),
+      icon: Icon(Icons.add),
     );
   }
 
