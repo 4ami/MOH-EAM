@@ -151,5 +151,34 @@
     "add_new_department": "إضافة قسم جديد",
     "failed_to_load": "فشل التحميل",
     "no_departments_found": "لم يتم العثور على أقسام",
-    "add_first_department": "أضف القسم الأول"
+    "add_first_department": "أضف القسم الأول",
+
+    "name_ar": "الاسم (باللغة العربية)",
+    "name_en": "الاسم (باللغة الانجيليزية)",
+    "is_root_department": "هل هذا قسم رئيسي؟",
+    "add_department_btn": "أضف القسم",
+
+    "root_departments": "الأقسام الرئيسية",
+    "sub_departments_level": "أقسام فرعية-المستوى الإداري: $level",
+    "confirm_parent_department": "تأكيد المستوى الإداري",
+    "confirm_parent_department_desc": "يؤكد هذا الإجراء أن القسم الجديد سيتم إدراجه كقسم فرعي تابع للقسم المحدد.",
+    
+    "department_added_successfully": "تم إضافة القسم بنجاح",
+    "department_adding_failed": "فشلت عملية إضافة قسم جديد",
+
+    "delete_root_confirmation_message": "تنبيه: هذا قسم رئيسي، وحذفه سيؤدي إلى إزالة جميع الأقسام الفرعية المرتبطة به بشكل نهائي.",
+    "delete_department_confirmation_message": "هل أنت متأكد من حذف هذا القسم؟ هذا الإجراء غير قابل للتراجع، وسيؤدي إلى حذف جميع الأقسام الفرعية المرتبطة به بشكل نهائي.",
+
+    "delete_department_success_notification_title": "تم الحذف بنجاح",
+    "delete_department_success_notification_desc": "تم حذف القسم وجميع أقسامه الفرعية المرتبطة به بنجاح.",
+
+    "delete_department_failed_notification_title": "فشل الحذف",
+    "delete_department_failed_notification_desc": "فشلت عملية حذف القسم بسبب: $reason",
+
+    "update_department_success_notification_title": "تم التحديث بنجاح",
+    "update_department_success_notification_desc": "تم تحديث بيانات القسم بنجاح.",
+
+    "update_department_failed_notification_title": "فشل التحديث",
+    "update_department_failed_notification_desc": "فشلت عملية تحديث بيانات القسم بسبب: $reason"
+
 }

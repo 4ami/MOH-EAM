@@ -36,6 +36,11 @@ final class AppRoutesInformation {
     path: 'entity/departments',
   );
 
+  static final RouteDataClass viewDepartment = RouteDataClass(
+    name: 'department_details',
+    path: 'department/view/:department',
+  );
+
   static final RouteDataClass devicesManagment = RouteDataClass(
     name: 'device_managment',
     path: 'entity/devices',

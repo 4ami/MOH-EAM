@@ -153,5 +153,33 @@
     "add_new_department": "Add New Department",
     "failed_to_load": "Failed To Load",
     "no_departments_found": "No Departments Found",
-    "add_first_department": "Add The First Department"
+    "add_first_department": "Add The First Department",
+
+    "name_ar": "Name (in Arabic)",
+    "name_en": "Name (in English)",
+    "is_root_department": "Is this a main department?",
+    "add_department_btn": "Add Department",
+
+    "root_departments": "Main Departments",
+    "sub_departments_level": "Sub Departments - Administrative Level: $level",
+    "confirm_parent_department": "Confirm Administrative Level",
+    "confirm_parent_department_desc": "This action confirms that the new department will be added as a sub-department under the selected department.",
+
+    "department_added_successfully": "Department added successfully",
+    "department_adding_failed": "Department Adding Operation Failed",
+
+    "delete_root_confirmation_message": "Warning: This is a root department. Deleting it will permanently remove all its associated sub-departments.",
+    "delete_department_confirmation_message": "Are you sure you want to delete this department? This action is irreversible and will permanently remove all its associated sub-departments.",
+
+    "delete_department_success_notification_title": "Deleted Successfully",
+    "delete_department_success_notification_desc": "The department and all its associated sub-departments have been deleted successfully.",
+
+    "delete_department_failed_notification_title": "Deletion Failed",
+    "delete_department_failed_notification_desc": "The department could not be deleted due to: $reason",
+
+    "update_department_success_notification_title": "Updated Successfully",
+    "update_department_success_notification_desc": "The department details have been updated successfully.",
+
+    "update_department_failed_notification_title": "Update Failed",
+    "update_department_failed_notification_desc": "The department details could not be updated due to: $reason"
 }

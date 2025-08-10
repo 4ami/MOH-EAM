@@ -74,4 +74,28 @@ class ValidationHelper {
     }
     return null;
   }
+
+  static String? dropDown<V extends Object>(V? value, BuildContext context) {
+    if (value == null) return context.translate(key: 'field_required');
+    if (value.toString().isEmpty) {
+      return context.translate(key: 'field_required');
+    }
+    return null;
+  }
+
+  // static String? nestedDropDown<V extends Object>(
+  //   V? value,
+  //   V? against,
+  //   BuildContext context,
+  // ) {
+  //   String? normalCheck = dropDown(value, context);
+  //   if (normalCheck != null) return normalCheck;
+  //   if (against.toString().isEmpty) {
+  //     return context.translate(key: 'field_required');
+  //   }
+
+  //   if()
+
+  //   return null;
+  // }
 }

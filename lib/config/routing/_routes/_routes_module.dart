@@ -12,6 +12,7 @@ import 'package:moh_eam/features/admin/admin_module.dart';
 import 'package:moh_eam/features/admin/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/departments/ui/page.dart';
+import 'package:moh_eam/features/entity/feature/departments/ui/view/department_viewer.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/ui/view/user_detail.dart';
 import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';

@@ -211,7 +211,7 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get departmentSubtree => get(key: 'DEPARTMENTS.subtree');
 
   @override
-  String get departmentChildren => get(key: 'DEVICES.children');
+  String get departmentChildren => get(key: 'DEPARTMENTS.children');
 
   @override
   String get departmentCREATE => get(key: 'DEPARTMENTS.create');
