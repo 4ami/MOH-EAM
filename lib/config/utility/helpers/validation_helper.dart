@@ -83,19 +83,64 @@ class ValidationHelper {
     return null;
   }
 
-  // static String? nestedDropDown<V extends Object>(
-  //   V? value,
-  //   V? against,
-  //   BuildContext context,
-  // ) {
-  //   String? normalCheck = dropDown(value, context);
-  //   if (normalCheck != null) return normalCheck;
-  //   if (against.toString().isEmpty) {
-  //     return context.translate(key: 'field_required');
-  //   }
+  static String? name(String? value, BuildContext context) {
+    if (value == null || value.isEmpty) {
+      return context.translate(key: 'field_required');
+    }
 
-  //   if()
+    var pattern = r'^(?!.*__)(?![_\s])[A-Za-z0-9\u0600-\u06FF _]+(?<![_\s])$';
+    if (!RegExp(pattern).hasMatch(value)) {
+      return context.translate(key: 'full_name_invalid_fromat');
+    }
 
-  //   return null;
-  // }
+    return null;
+  }
+
+  static String? serial(String? value, BuildContext context) {
+    if (value == null || value.isEmpty) {
+      return context.translate(key: 'field_required');
+    }
+
+    var pattern = r'^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$';
+
+    if (!RegExp(pattern).hasMatch(value)) {
+      return context.translate(key: 'invalid_format');
+    }
+
+    if (value.length > 255) {
+      return context.translate(key: 'field_value_too_long');
+    }
+
+    return null;
+  }
+
+  static String? model(String? value, BuildContext context) {
+    if (value == null || value.isEmpty) {
+      return context.translate(key: 'field_required');
+    }
+    if (value.length > 255) {
+      return context.translate(key: 'field_value_too_long');
+    }
+    return null;
+  }
+
+  static String? type(String? value, BuildContext context) {
+    if (value == null || value.isEmpty) {
+      return context.translate(key: 'field_required');
+    }
+
+    if (value.length > 100) {
+      return context.translate(key: 'field_value_too_long');
+    }
+
+    return null;
+  }
+
+  static String? hostName(String? value, BuildContext context) {
+    if (value != null && value.length > 100) {
+      return context.translate(key: 'field_value_too_long');
+    }
+
+    return null;
+  }
 }

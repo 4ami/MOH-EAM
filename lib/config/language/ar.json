@@ -179,6 +179,104 @@
     "update_department_success_notification_desc": "تم تحديث بيانات القسم بنجاح.",
 
     "update_department_failed_notification_title": "فشل التحديث",
-    "update_department_failed_notification_desc": "فشلت عملية تحديث بيانات القسم بسبب: $reason"
+    "update_department_failed_notification_desc": "فشلت عملية تحديث بيانات القسم بسبب: $reason",
 
+    "serial": "الرقم التسلسلي للجهاز",
+    "model": "طراز الجهاز",
+    "type": "نوع الجهاز",
+    "host_name": "اسم المضيف (الجهاز)",
+    "is_in_domain?": "هل الجهاز ضمن النطاق (Domain)؟",
+    "is_kasper_installed?": "هل برنامج مكافحة الفيروسات Kaspersky مثبت؟",
+    "is_crowdstrike_installed?": "هل منصة الحماية المتقدمة CrowdStrike مثبتة؟",
+    "true_state": "✅ نعم",
+    "false_state": "❌ لا",
+
+    "add_device_btn": "إضافة جهاز جديد",
+
+    "device_domain_filter": "التسجيل في النطاق (Domain)",
+    "device_in_domain_filter_value": "مسجل ✅",
+    "device_not_in_domain_filter_value": "غير مسجل ❌",
+
+    "device_kasper_filter": "حالة Kaspersky",
+    "device_kasper_installed_filter_value": "مثبت ✅",
+    "device_kasper_not_installed_filter_value": "غير مثبت ❌",
+
+    "device_crowdstrike_filter": "حالة CrowdStrike",
+    "device_crowdstrike_installed_filter_value": "مثبت ✅",
+    "device_crowdstrike_not_installed_filter_value": "غير مثبت ❌",
+
+    "roles_card_title": "تفاصيل الدور",
+    "description": "الوصف",
+
+    "role_success_title_general": "تمت العملية بنجاح",
+    "role_success_message_general": "تم تنفيذ العملية المتعلقة بالدور بنجاح.",
+    "role_success_title_create": "تمت إضافة الدور بنجاح",
+    "role_success_message_create": "تم إنشاء الدور الجديد بنجاح.",
+    "role_success_title_delete": "تم حذف الدور بنجاح",
+    "role_success_message_delete": "تم حذف الدور وجميع الصلاحيات المرتبطة به بنجاح.",
+
+    "role_failed_title_general": "فشل في تنفيذ العملية",
+    "role_failed_message_general": "فشلت عملية تنفيذ الإجراء المتعلق بالدور بسبب: $reason",
+    "role_failed_title_create": "فشل في إضافة الدور",
+    "role_failed_message_create": "فشلت عملية إنشاء الدور بسبب: $reason",
+    "role_failed_title_delete": "فشل في حذف الدور",
+    "role_failed_message_delete": "فشلت عملية حذف الدور بسبب: $reason",
+
+    "fobidden_delete_role403": "لا تملك الصلاحية لحذف هذا الدور.",
+    "role_not_found404": "تعذر العثور على الدور المطلوب.",
+    "user_not_found_role_creation_failed_404": "فشلت عملية إنشاء الدور بسبب عدم العثور على المستخدم المحدد.",
+    "role_name_unique_violation_400": "يوجد دور آخر بنفس الاسم. يرجى اختيار اسم مختلف.",
+    "role_create_failed400": "فشلت عملية إنشاء الدور بسبب مدخلات غير صحيحة.",
+    "role_create_failed403": "ليست لديك الصلاحيات اللازمة لإنشاء الأدوار.",
+    "user_not_found_404": "تعذر العثور على المستخدم المطلوب.",
+    "request_query_invalid_400": "يتضمن الطلب معاملات أو تنسيقًا غير صحيح.",
+    "departments_tree_404": "تعذر تحميل شجرة الأقسام.",
+    "departments_subtree_404": "تعذر تحميل الشجرة الفرعية للقسم المطلوب.",
+    "departments_roots_404": "تعذر العثور على الأقسام الرئيسية.",
+
+    "add_role_btn_label": "إضافة دور جديد",
+    "no_roles_found_try_to_add_new": "لم يتم العثور على أدوار. يمكنك البدء بإضافة دور جديد.",
+
+    "VIEW": "عرض",
+    "CREATE": "إنشاء",
+    "UPDATE": "تحديث",
+    "DELETE": "حذف",
+
+    "add_new_role_title": "إضافة دور جديد",
+
+    "must_select_at_least_one_permission": "يجب اختيار إذن واحد على الأقل.",
+
+    "add_new_device_title": "إضافة جهاز جديد",
+    "add_new_user_title": "إضافة مستخدم جديد",
+    "assign_device_to_user": "تعيين الجهاز الجديد لمستخدم محدد",
+
+    "device_success_title_general": "تمت العملية بنجاح",
+    "device_success_message_general": "تم تنفيذ العملية المتعلقة بالجهاز بنجاح.",
+    "device_success_title_create": "تمت إضافة الجهاز بنجاح",
+    "device_success_message_create": "تم إنشاء الجهاز الجديد بنجاح.",
+    "device_success_title_delete": "تم حذف الجهاز بنجاح",
+    "device_success_message_delete": "تم حذف الجهاز بنجاح.",
+
+    "device_failed_title_general": "فشل في تنفيذ العملية",
+    "device_failed_message_general": "فشلت عملية تنفيذ الإجراء المتعلق بالجهاز بسبب: $reason",
+    "device_failed_title_create": "فشل في إضافة الجهاز",
+    "device_failed_message_create": "فشلت عملية إنشاء الجهاز بسبب: $reason",
+    "device_failed_title_delete": "فشل في حذف الجهاز",
+    "device_failed_message_delete": "فشلت عملية حذف الجهاز بسبب: $reason",
+
+    "assign_to_user_hint": "أدخل اسم المستخدم للتحقق",
+    "user_information": "معلومات المستخدم",
+    "assign_user": "تعيين لمستخدم (اختياري)",
+
+    "check": "تحقق",
+
+    "invalid_format": "الصيغة غير صحيحة",
+
+    "global_search_failed_title": "فشل البحث",
+    "global_search_failed_message": "فشل البحث العام بسبب: $reason",
+
+    "result_in_users": "تم العثور عليه في المستخدمين",
+    "result_in_devices": "تم العثور عليه في الأجهزة",
+
+    "no_results": "لا يوجد نتائج"
 }

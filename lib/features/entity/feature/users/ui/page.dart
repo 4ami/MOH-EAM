@@ -85,6 +85,11 @@ class _UsersViewState extends State<UsersView> {
                     UserEntitySearchFiltersChanged(page: UpdateTo(p)),
                   );
                   // trigger search
+                  var auth =
+                      context.read<AuthBloc>().state as AuthenticatedState;
+                  context.read<UserEntityBloc>().add(
+                    UserEntityFetchUsersEvent(token: auth.token),
+                  );
                 },
               )
             else
@@ -127,6 +132,10 @@ class _UsersViewState extends State<UsersView> {
                   UserEntitySearchFiltersChanged(page: UpdateTo(p)),
                 );
                 // trigger search
+                var auth = context.read<AuthBloc>().state as AuthenticatedState;
+                context.read<UserEntityBloc>().add(
+                  UserEntityFetchUsersEvent(token: auth.token),
+                );
               },
             ),
           )

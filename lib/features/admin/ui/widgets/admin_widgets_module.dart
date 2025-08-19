@@ -11,6 +11,7 @@ import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
 import 'package:moh_eam/features/admin/bloc/bloc.dart';
 import 'package:moh_eam/features/admin/data/sources/static/drawer_data.dart';
+import 'package:moh_eam/features/entity/feature/devices/ui/widgets/device_widgets_module.dart';
 import 'package:moh_eam/features/entity/feature/users/ui/widgets/users_widgets_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 

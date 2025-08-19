@@ -9,4 +9,5 @@ abstract interface class DataRepository {
     required String token,
     String locale = 'ar',
   });
+  Future<FetchUserStatistics> fetchUserStats({required String token});
 }

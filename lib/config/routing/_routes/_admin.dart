@@ -64,8 +64,46 @@ final class _Admin implements _RouteInterface {
     }
 
     authState = authState as AuthenticatedState;
-    var admins = ['super_admin', 'admin', 'moderator', 'system_admin'];
-    if (admins.contains(authState.user.role)) {
+
+    var userCREATE = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'users',
+      'CREATE',
+    );
+    var userEdit = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'users',
+      'UPDATE',
+    );
+
+    var deviceCREATE = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'devices',
+      'CREATE',
+    );
+    var deviceEdit = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'devices',
+      'UPDATE',
+    );
+
+    var departmentsCREATE = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'departments',
+      'CREATE',
+    );
+    var departmentsEdit = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'departments',
+      'CREATE',
+    );
+
+    if (userCREATE ||
+        userEdit ||
+        deviceCREATE ||
+        deviceEdit ||
+        departmentsCREATE ||
+        departmentsEdit) {
       Logger.i(
         'Authorized access to \'admin dashboard\'',
         tag: '[Admin-Redirect]',
@@ -167,7 +205,7 @@ final class _Admin implements _RouteInterface {
             var event = DepartmentRequestSubtree(
               token: auth.token,
               parent: parent,
-              lang: lang
+              lang: lang,
             );
             return NoTransitionPage(
               child: BlocProvider<DepartmentBloc>(
@@ -179,12 +217,50 @@ final class _Admin implements _RouteInterface {
         ),
       ],
     ),
-
     GoRoute(
       path: AppRoutesInformation.devicesManagment.path,
       name: AppRoutesInformation.devicesManagment.name,
       pageBuilder: (context, state) {
-        return NoTransitionPage(child: DevicesView());
+        return NoTransitionPage(
+          child: BlocProvider<DeviceBloc>(
+            create: (context) {
+              var auth = context.read<AuthBloc>().state as AuthenticatedState;
+              return DeviceBloc()..add(FetchDevicesEvent(token: auth.token));
+            },
+            child: DeviceView(),
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutesInformation.rolesManagment.path,
+      name: AppRoutesInformation.rolesManagment.name,
+      pageBuilder: (context, state) {
+        return NoTransitionPage(
+          child: BlocProvider<RoleBloc>(
+            create: (context) {
+              var auth = context.read<AuthBloc>().state as AuthenticatedState;
+              return RoleBloc()..add(FetchRolesEvent(token: auth.token));
+            },
+            child: RolesPage(),
+          ),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutesInformation.searchResults.path,
+      name: AppRoutesInformation.searchResults.name,
+      pageBuilder: (context, state) {
+        if (state.extra is! AdminBloc) {
+          return NoTransitionPage(child: ErrorPage());
+        }
+        var value = state.extra as AdminBloc;
+        return NoTransitionPage(
+          child: BlocProvider<AdminBloc>.value(
+            value: value,
+            child: SearchResult(),
+          ),
+        );
       },
     ),
     _EntityViewerPage().page,

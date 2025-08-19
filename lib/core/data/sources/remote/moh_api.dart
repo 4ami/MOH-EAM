@@ -65,6 +65,7 @@ abstract class APIConfig {
   String get authentication;
   String get authToken;
   String get roles;
+  String get roleDELETE;
 
   String get deviceCREATE;
   String get allDevices;
@@ -82,6 +83,9 @@ abstract class APIConfig {
   String get userDetails;
   String get userCREATE;
   String get userUPDATE;
+  String get userStatistics;
+
+  String get globalSearch;
 
   /// Load and prepare any necessary configuration resources.
   ///
@@ -193,6 +197,9 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get roles => get(key: 'AUTH.roles');
 
   @override
+  String get roleDELETE => get(key: 'AUTH.role_delete');
+
+  @override
   String get deviceCREATE => get(key: 'DEVICES.create');
 
   @override
@@ -233,6 +240,12 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
 
   @override
   String get userUPDATE => get(key: 'USERS.UPDATE');
+
+  @override
+  String get userStatistics => get(key: 'USERS.STATS');
+
+  @override
+  String get globalSearch => get(key: 'GLOBAL_SEARCH');
 }
 
 /// Production environment implementation of [APIConfig].
@@ -269,6 +282,9 @@ final class _$Production implements APIConfig {
 
   @override
   String get roles => String.fromEnvironment('ROLES');
+
+  @override
+  String get roleDELETE => String.fromEnvironment('ROLE_DELETE');
 
   @override
   String get deviceCREATE => String.fromEnvironment('DEVICE_CREATE');
@@ -312,6 +328,12 @@ final class _$Production implements APIConfig {
 
   @override
   String get userUPDATE => String.fromEnvironment('UPDATE_USER');
+
+  @override
+  String get userStatistics => String.fromEnvironment('USER_STATISTICS');
+
+  @override
+  String get globalSearch => String.fromEnvironment('GLOBAL_SEARCH');
 }
 
 /// Utility to determine the active [Environment] at runtime.

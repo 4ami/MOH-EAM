@@ -83,6 +83,10 @@ class StaticDrawerData {
         child: child,
       ),
       DrawerItemEntity(
+        clickable: true,
+        callback: () {
+          context.pushNamed(AppRoutesInformation.rolesManagment.name);
+        },
         itemLabel: context.translate(key: 'roles_section'),
         child: child,
       ),

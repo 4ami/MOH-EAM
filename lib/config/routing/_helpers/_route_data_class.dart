@@ -70,4 +70,9 @@ final class AppRoutesInformation {
     name: 'edit_device',
     path: 'edit/device',
   );
+
+  static final RouteDataClass searchResults = RouteDataClass(
+    name: 'search_results',
+    path: 'search/results',
+  );
 }

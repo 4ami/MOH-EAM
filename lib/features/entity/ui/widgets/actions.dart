@@ -3,8 +3,8 @@ part of 'entity_widgets_module.dart';
 class EntityActions extends StatelessWidget {
   final bool hasEdit;
   final bool hasDelete;
-  final VoidCallback onDelete;
-  final VoidCallback onEdit;
+  final VoidCallback? onDelete;
+  final VoidCallback? onEdit;
   const EntityActions({
     super.key,
     required this.hasEdit,

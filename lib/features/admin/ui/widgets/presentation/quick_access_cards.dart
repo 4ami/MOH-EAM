@@ -6,6 +6,7 @@ class QuickAccessCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var t = context.translate;
+    var w = context.watch<AdminBloc>().state;
     return Wrap(
       spacing: context.responsive.spacing,
       runSpacing: context.responsive.spacing,
@@ -14,7 +15,11 @@ class QuickAccessCards extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         //Users data
-        _buildCard(context, count: 100, label: t(key: 'total_users')),
+        _buildCard(
+          context,
+          count: w.totalUsers,
+          label: t(key: 'total_users'),
+        ),
         // GestureDetector(
         //   onTap: () =>
         //       context.pushNamed(AppRoutesInformation.userManagement.name),
@@ -25,7 +30,11 @@ class QuickAccessCards extends StatelessWidget {
         //   ),
         // ),
         //Devices data
-        _buildCard(context, count: 100, label: t(key: 'total_devices')),
+        _buildCard(
+          context,
+          count: w.totalDevices,
+          label: t(key: 'total_devices'),
+        ),
         // _buildCard(
         //   context,
         //   icon: AssetsHelper.devicesIcon,

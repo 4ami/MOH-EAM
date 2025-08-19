@@ -23,7 +23,7 @@ class SearchField extends StatelessWidget {
 
   Widget _field(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: TextFormField(
         onChanged: callback,
         decoration: InputDecoration(
@@ -76,14 +76,14 @@ class SearchField extends StatelessWidget {
       boxShadow: [
         BoxShadow(
           blurRadius: 32,
-          offset: const Offset(10, 10),
+          offset: const Offset(5, 5),
           color: context.shadow.withValues(alpha: .15),
           blurStyle: BlurStyle.normal,
           // spreadRadius: 2,
         ),
         BoxShadow(
           blurRadius: 32,
-          offset: -const Offset(15, 15),
+          offset: -const Offset(10, 10),
           color: context.surfaceBright.withValues(alpha: .06),
           blurStyle: BlurStyle.normal,
           // spreadRadius: 2,

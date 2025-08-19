@@ -20,6 +20,7 @@ class Filter extends StatelessWidget {
   Widget get _buildFilter {
     return switch (resource) {
       'users' => const UserFilter(),
+      'devices' => const DeviceFiltersWidget(),
       _ => SizedBox.shrink(),
     };
   }

@@ -3,6 +3,11 @@ library;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moh_eam/config/logging/logger.dart';
 import 'package:moh_eam/core/data/model/api_error.dart';
+import 'package:moh_eam/core/data/model/base_response.dart';
+import 'package:moh_eam/features/admin/data/models/global_search.dart';
+import 'package:moh_eam/features/admin/data/repositories/admin_repo_imp.dart';
+import 'package:moh_eam/features/admin/domain/repositories/admin_repository.dart';
+import 'package:moh_eam/features/admin/domain/services/search.dart';
 import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_departments_root_model.dart';
 import 'package:moh_eam/features/auth/data/models/fetch_roles_model.dart';
 import 'package:moh_eam/features/admin/data/models/statistics.dart';
@@ -22,6 +27,7 @@ final class AdminBloc extends Bloc<AdminEvent, AdminState> {
 
   AdminBloc() : super(const AdminState()) {
     _fetchDashboard();
+    _search();
   }
 
   // This method handles errors that may occur during the fetching of data
@@ -34,9 +40,9 @@ final class AdminBloc extends Bloc<AdminEvent, AdminState> {
   }
 
   void _fetchDashboard() {
-    List<Object>? then(List<Object> res) {
+    List<BaseResponse>? then(List<BaseResponse> res) {
       if (res.isEmpty) {
-        throw '';
+        throw 'general_error';
       }
       final roles = res[0] as FetchRolesModel;
 
@@ -62,6 +68,7 @@ final class AdminBloc extends Bloc<AdminEvent, AdminState> {
             service.fetchRoles(event.token),
             service.fetchStats(event.token),
             service.fetchDepts(event.token),
+            service.fetchUserStats(event.token),
           ]).then(then).catchError((e) {
             error = handleError(e);
             Logger.e(
@@ -79,6 +86,7 @@ final class AdminBloc extends Bloc<AdminEvent, AdminState> {
       final roles = response[0] as FetchRolesModel;
       final stats = response[1] as FetchStatistics;
       final depts = response[2] as FetchDepartmentsRootModel;
+      final userStats = response[3] as FetchUserStatistics;
 
       final List<RoleEntity> rolesList = roles.roles
           .map((role) => role.toDomain())
@@ -94,8 +102,53 @@ final class AdminBloc extends Bloc<AdminEvent, AdminState> {
           event: AdminDashboardSuccess(),
           stats: stats.statistics,
           departments: deptRoots,
+          totalDevices: stats.totalDevices,
+          totalUsers: userStats.totalUsers,
         ),
       );
+    });
+  }
+
+  void _search() {
+    GlobalSearchResponse? then(GlobalSearchResponse res) {
+      if (res.code != 200) throw res.messageKey;
+      return res;
+    }
+
+    on<AdminGlobalSearchEvent>((event, emit) async {
+      emit(state.copyWith(event: AdminLoadEvent()));
+      Logger.d('Searching for ${event.query}', tag: 'AdminBloc');
+
+      String key = '';
+
+      AdminRepository adminRepo = AdminRepoImp();
+      GlobalSearchService service = GlobalSearchService(adminRepo);
+
+      GlobalSearchResponse? res = await service
+          .call(token: event.token, query: event.query)
+          .then(then)
+          .catchError((e) {
+            key = handleError(e);
+            return null;
+          });
+
+      Logger.i('Search Response Received', tag: 'AdminBloc');
+
+      if (key.isNotEmpty || res == null) {
+        emit(state.copyWith(event: AdminGlobalSearchFailed(reason: key)));
+        Logger.e('Search failed with key: $key', tag: 'AdminBloc');
+        return;
+      }
+
+      emit(
+        state.copyWith(
+          event: AdminGlobalSearchSuccess(
+            users: res.users.map((u) => u.toDomain()).toList(),
+            devices: res.devices.map((d) => d.toDomain()).toList(),
+          ),
+        ),
+      );
+      return;
     });
   }
 }

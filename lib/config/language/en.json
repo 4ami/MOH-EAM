@@ -181,5 +181,104 @@
     "update_department_success_notification_desc": "The department details have been updated successfully.",
 
     "update_department_failed_notification_title": "Update Failed",
-    "update_department_failed_notification_desc": "The department details could not be updated due to: $reason"
+    "update_department_failed_notification_desc": "The department details could not be updated due to: $reason",
+
+    "serial": "Device Serial Number",
+    "model": "Device Model",
+    "type": "Device Type",
+    "host_name": "Host Name (Device)",
+    "is_in_domain?": "Is the device in the domain?",
+    "is_kasper_installed?": "Is Kaspersky Antivirus installed?",
+    "is_crowdstrike_installed?": "Is CrowdStrike Advanced Protection Platform installed?",
+    "true_state": "Yes ✅",
+    "false_state": "No ❌",
+
+    "add_device_btn": "Add New Device",
+
+    "device_domain_filter": "Domain Enrollment",
+    "device_in_domain_filter_value": "Enrolled ✅",
+    "device_not_in_domain_filter_value": "Not Enrolled ❌",
+
+    "device_kasper_filter": "Kaspersky Status",
+    "device_kasper_installed_filter_value": "Installed ✅",
+    "device_kasper_not_installed_filter_value": "Not Installed ❌",
+
+    "device_crowdstrike_filter": "CrowdStrike Status",
+    "device_crowdstrike_installed_filter_value": "Installed ✅",
+    "device_crowdstrike_not_installed_filter_value": "Not Installed ❌",
+
+    "roles_card_title": "Role Details",
+    "description": "Description",
+
+    "role_success_title_general": "Operation Successful",
+    "role_success_message_general": "The role operation was completed successfully.",
+    "role_success_title_create": "Role Created Successfully",
+    "role_success_message_create": "The role was created successfully.",
+    "role_success_title_delete": "Role Deleted Successfully",
+    "role_success_message_delete": "The role and all related permissions were deleted successfully.",
+
+    "role_failed_title_general": "Operation Failed",
+    "role_failed_message_general": "The role operation failed due to: $reason",
+    "role_failed_title_create": "Failed to Create Role",
+    "role_failed_message_create": "The role could not be created due to: $reason",
+    "role_failed_title_delete": "Failed to Delete Role",
+    "role_failed_message_delete": "The role could not be deleted due to: $reason",
+
+    "fobidden_delete_role403": "You are not authorized to delete this role.",
+    "role_not_found404": "The specified role could not be found.",
+    "user_not_found_role_creation_failed_404": "Role creation failed because the specified user was not found.",
+    "role_name_unique_violation_400": "A role with this name already exists. Please choose a different name.",
+    "role_create_failed400": "Role creation failed due to invalid input.",
+    "role_create_failed403": "You do not have permission to create roles.",
+    "user_not_found_404": "The requested user could not be found.",
+    "request_query_invalid_400": "The request contains invalid parameters or query structure.",
+    "departments_tree_404": "The departments tree could not be found.",
+    "departments_subtree_404": "The requested department subtree could not be found.",
+    "departments_roots_404": "No root departments were found.",
+
+    "add_role_btn_label": "Add a New Role",
+    "no_roles_found_try_to_add_new": "No roles found. Add a new role to begin.",
+
+    "VIEW": "View",
+    "CREATE": "Create",
+    "UPDATE": "Update",
+    "DELETE": "Delete",
+
+    "add_new_role_title": "Add New Role",
+
+    "must_select_at_least_one_permission": "You must select at least one permission.",
+
+    "add_new_device_title": "Add New Device",
+    "add_new_user_title": "Add New User",
+    "assign_device_to_user": "Assign the new device to a specific user",
+
+    "device_success_title_general": "Operation Successful",
+    "device_success_message_general": "The device-related operation was completed successfully.",
+    "device_success_title_create": "Device Added Successfully",
+    "device_success_message_create": "The new device was created successfully.",
+    "device_success_title_delete": "Device Deleted Successfully",
+    "device_success_message_delete": "The device was deleted successfully.",
+
+    "device_failed_title_general": "Operation Failed",
+    "device_failed_message_general": "The device-related operation failed due to: $reason",
+    "device_failed_title_create": "Failed to Add Device",
+    "device_failed_message_create": "The device creation failed due to: $reason",
+    "device_failed_title_delete": "Failed to Delete Device",
+    "device_failed_message_delete": "The device deletion failed due to: $reason",
+
+    "assign_to_user_hint": "Enter username to verify",
+    "user_information": "User Information",
+    "assign_user": "Assign to user (optional)",
+
+    "check": "Check",
+
+    "invalid_format": "Invalid format",
+
+    "global_search_failed_title": "Search Failed",
+    "global_search_failed_message": "The global search failed due to: $reason",
+    
+    "result_in_users": "Found in Users",
+    "result_in_devices": "Found in Devices",
+
+    "no_results": "No Results"
 }

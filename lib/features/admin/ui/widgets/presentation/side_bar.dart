@@ -38,6 +38,9 @@ class SideBar extends StatelessWidget {
           ),
         ),
         SideBarItemContainer(
+          onPressed: () {
+            context.pushNamed(AppRoutesInformation.rolesManagment.name);
+          },
           shrinked: Image.asset(
             AssetsHelper.rolesIcon,
             scale: context.responsive.scale(30, .5),
@@ -77,14 +80,14 @@ class SideBar extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        SideBarItemContainer(
-          shrinked: Icon(Icons.support_agent_rounded),
-          expanded: Text(
-            context.translate(key: 'technical_support'),
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-          ),
-        ),
+        // SideBarItemContainer(
+        //   shrinked: Icon(Icons.support_agent_rounded),
+        //   expanded: Text(
+        //     context.translate(key: 'technical_support'),
+        //     overflow: TextOverflow.ellipsis,
+        //     textAlign: TextAlign.center,
+        //   ),
+        // ),
         SideBarItemContainer(
           onPressed: () {
             context.read<AuthBloc>().add(SignoutAuthEvent());

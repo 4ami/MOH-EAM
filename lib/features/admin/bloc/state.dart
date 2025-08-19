@@ -7,6 +7,7 @@ final class AdminState {
   final List<DeviceEntity> devices;
   final Map<String, int> stats;
   final AdminEvent event;
+  final int totalDevices, totalUsers;
 
   const AdminState({
     this.users = const [],
@@ -15,6 +16,8 @@ final class AdminState {
     this.devices = const [],
     this.stats = const {},
     this.event = const AdminInitialEvent(),
+    this.totalDevices = 0,
+    this.totalUsers = 0,
   });
 
   AdminState copyWith({
@@ -24,6 +27,8 @@ final class AdminState {
     List<DeviceEntity>? devices,
     Map<String, int>? stats,
     AdminEvent? event,
+    int? totalDevices,
+    int? totalUsers,
   }) {
     return AdminState(
       users: users ?? this.users,
@@ -32,6 +37,8 @@ final class AdminState {
       devices: devices ?? this.devices,
       stats: stats ?? this.stats,
       event: event ?? this.event,
+      totalDevices: totalDevices ?? this.totalDevices,
+      totalUsers: totalUsers ?? this.totalUsers,
     );
   }
 }
