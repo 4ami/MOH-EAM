@@ -33,11 +33,31 @@ class ValidationHelper {
     return null;
   }
 
-  static String? fullName(String? n, BuildContext context) {
+  static String? fullName(
+    String? n,
+    BuildContext context, {
+    required bool? isAr,
+  }) {
     if (n == null || n.isEmpty || n.trim().isEmpty) {
       return context.translate(key: 'field_required');
     }
-    var pattern = RegExp(r'^[A-Za-z\u0600-\u06FF\s]+$');
+
+    if (n.length > 50) {
+      return context.translate(key: 'field_value_too_long');
+    }
+
+    RegExp pattern;
+
+    if (isAr != null) {
+      if (isAr) {
+        pattern = RegExp(r'^[\u0600-\u06FF\s]+$');
+      } else {
+        pattern = RegExp(r'^[A-Za-z\s]+$');
+      }
+    } else {
+      pattern = RegExp(r'^[A-Za-z\u0600-\u06FF\s]+$');
+    }
+
     if (!pattern.hasMatch(n) || n.length > 50) {
       return context.translate(key: 'full_name_invalid_fromat');
     }
@@ -57,9 +77,9 @@ class ValidationHelper {
 
   static String? mobile(String? m, BuildContext context) {
     if (m == null || m.isEmpty) return context.translate(key: 'field_required');
-    if (m.length > 9) return context.translate(key: 'mobile_invalid_format');
+    if (m.length > 10) return context.translate(key: 'mobile_invalid_format');
 
-    var pattern = RegExp(r'^\+?[0-9]\d{9,13}$');
+    var pattern = RegExp(r'^05\d{8}$');
     if (!pattern.hasMatch(m)) {
       return context.translate(key: 'mobile_invalid_format');
     }

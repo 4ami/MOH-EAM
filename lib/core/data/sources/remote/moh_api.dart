@@ -78,11 +78,13 @@ abstract class APIConfig {
   String get departmentCREATE;
   String get departmentUPDATE;
   String get departmentDELETE;
+  String get departmentSEARCH;
 
   String get usersFetch;
   String get userDetails;
   String get userCREATE;
   String get userUPDATE;
+  String get userDELETE;
   String get userStatistics;
 
   String get globalSearch;
@@ -230,6 +232,9 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get departmentDELETE => get(key: 'DEPARTMENTS.delete');
 
   @override
+  String get departmentSEARCH => get(key: 'DEPARTMENTS.search');
+
+  @override
   String get usersFetch => get(key: 'USERS.FETCH_USERS');
 
   @override
@@ -240,6 +245,9 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
 
   @override
   String get userUPDATE => get(key: 'USERS.UPDATE');
+
+  @override
+  String get userDELETE => get(key: 'USERS.DELETE');
 
   @override
   String get userStatistics => get(key: 'USERS.STATS');
@@ -318,6 +326,9 @@ final class _$Production implements APIConfig {
   String get departmentDELETE => String.fromEnvironment('DEPARTMENT_DELETE');
 
   @override
+  String get departmentSEARCH => String.fromEnvironment('DEPARTMENT_SEARCH');
+
+  @override
   String get usersFetch => String.fromEnvironment('FETCH_USERS');
 
   @override
@@ -328,6 +339,9 @@ final class _$Production implements APIConfig {
 
   @override
   String get userUPDATE => String.fromEnvironment('UPDATE_USER');
+
+  @override
+  String get userDELETE => String.fromEnvironment('DELETE_USER');
 
   @override
   String get userStatistics => String.fromEnvironment('USER_STATISTICS');

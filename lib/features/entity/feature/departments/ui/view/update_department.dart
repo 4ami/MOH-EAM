@@ -133,59 +133,7 @@ class _UpdateDepartmentWidgetState extends State<UpdateDepartmentWidget> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: BlocListener<DepartmentBloc, DepartmentState>(
-        listener: (context, state) {
-          if (state.event is DepartmentSuccessEvent) {
-            setState(() {
-              if (state.children.isNotEmpty) {
-                int level = state.children[0].level;
-                levelChildren[level] = state.children
-                    .where((e) => e.id != widget.department.id)
-                    .toList();
-              }
-            });
-          }
-
-          if (state.event is DepartmentTreeSuccess) {
-            setState(() {
-              _isLoading = false;
-              _departmentTree = (state.event as DepartmentTreeSuccess)
-                  .departments
-                  .where((e) => e.id != widget.department.id)
-                  .toList();
-              _buildHierarchyFromTree();
-            });
-          }
-
-          if (state.event is UpdateDepartmentSuccess) {
-            context.successToast(
-              title: context.translate(
-                key: 'update_department_success_notification_title',
-              ),
-              description: context.translate(
-                key: 'update_department_success_notification_desc',
-              ),
-            );
-            context.pop();
-            return;
-          }
-
-          if (state.event is DepartmentUpdateFailedEvent) {
-            String desc = context.translate(
-              key: 'update_department_failed_notification_title',
-            );
-            desc = desc.replaceAll(
-              '\$reason',
-              context.translate(key: state.event.message),
-            );
-            context.errorToast(
-              title: context.translate(
-                key: 'update_department_failed_notification_title',
-              ),
-              description: desc,
-            );
-            return;
-          }
-        },
+        listener: _departmentListener,
         child: Container(
           padding: EdgeInsets.all(25),
           margin: EdgeInsets.only(
@@ -224,7 +172,8 @@ class _UpdateDepartmentWidgetState extends State<UpdateDepartmentWidget> {
                   _buildField(
                     controller: _nameARController,
                     label: context.translate(key: 'name_ar'),
-                    validator: (ar) => ValidationHelper.fullName(ar, context),
+                    validator: (ar) =>
+                        ValidationHelper.fullName(ar, context, isAr: true),
                     onChanged: (n) {
                       // Handle name AR changes if needed
                     },
@@ -233,7 +182,8 @@ class _UpdateDepartmentWidgetState extends State<UpdateDepartmentWidget> {
                   _buildField(
                     controller: _nameENController,
                     label: context.translate(key: 'name_en'),
-                    validator: (en) => ValidationHelper.fullName(en, context),
+                    validator: (en) =>
+                        ValidationHelper.fullName(en, context, isAr: false),
                     onChanged: (n) {
                       // Handle name EN changes if needed
                     },
@@ -265,7 +215,8 @@ class _UpdateDepartmentWidgetState extends State<UpdateDepartmentWidget> {
 
                   _buildField(
                     controller: _levelNameController,
-                    validator: (ln) => ValidationHelper.fullName(ln, context),
+                    validator: (ln) =>
+                        ValidationHelper.fullName(ln, context, isAr: null),
                     label: context.translate(key: 'level_name'),
                     onChanged: (n) {
                       // Handle level name changes if needed
@@ -286,6 +237,7 @@ class _UpdateDepartmentWidgetState extends State<UpdateDepartmentWidget> {
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: DropdownButtonFormField<String>(
+                          isExpanded: true,
                           validator: (v) =>
                               ValidationHelper.dropDown(v, context),
                           value: rootId,
@@ -365,6 +317,68 @@ class _UpdateDepartmentWidgetState extends State<UpdateDepartmentWidget> {
     );
   }
 
+  void _departmentListener(BuildContext context, DepartmentState state) {
+    if (state.event is DepartmentSuccessEventSealed) {
+      var t = context.translate;
+      var success = state.event as DepartmentSuccessEventSealed;
+
+      if (success is DepartmentSuccessEvent) {
+        setState(() {
+          if (state.children.isNotEmpty) {
+            int level = state.children[0].level;
+            levelChildren[level] = state.children
+                .where((e) => e.id != widget.department.id)
+                .toList();
+          }
+        });
+        return;
+      }
+
+      if (success is DepartmentTreeSuccess) {
+        setState(() {
+          _isLoading = false;
+          _departmentTree = (state.event as DepartmentTreeSuccess).departments
+              .where((e) => e.id != widget.department.id)
+              .toList();
+          _buildHierarchyFromTree();
+        });
+        return;
+      }
+
+      String title = t(key: success.title);
+      String description = t(key: success.message);
+      context.successToast(title: title, description: description);
+
+      if (success is UpdateDepartmentSuccess) context.pop();
+      return;
+    }
+
+    if (state.event is DepartmentFailedEvent) {
+      var t = context.translate;
+      var failed = state.event as DepartmentFailedEvent;
+
+      String title = t(key: failed.title);
+      String description = t(
+        key: failed.message,
+      ).replaceAll('\$reason', t(key: failed.reason));
+
+      context.errorToast(title: title, description: description);
+      return;
+    }
+
+    if (state.event is DeleteDepartmentSuccess) {
+      context.successToast(
+        title: context.translate(
+          key: 'delete_department_success_notification_title',
+        ),
+        description: context.translate(
+          key: 'delete_department_success_notification_desc',
+        ),
+      );
+      return;
+    }
+  }
+
   Widget _buildShimmerDropdown(String label) {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -418,6 +432,7 @@ class _UpdateDepartmentWidgetState extends State<UpdateDepartmentWidget> {
       return Padding(
         padding: const EdgeInsets.all(16),
         child: DropdownButtonFormField<String>(
+          isExpanded: true,
           value: levelSelected[level],
           decoration: InputDecoration(
             labelText: context

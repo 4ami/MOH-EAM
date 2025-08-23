@@ -171,18 +171,6 @@
     "delete_root_confirmation_message": "Warning: This is a root department. Deleting it will permanently remove all its associated sub-departments.",
     "delete_department_confirmation_message": "Are you sure you want to delete this department? This action is irreversible and will permanently remove all its associated sub-departments.",
 
-    "delete_department_success_notification_title": "Deleted Successfully",
-    "delete_department_success_notification_desc": "The department and all its associated sub-departments have been deleted successfully.",
-
-    "delete_department_failed_notification_title": "Deletion Failed",
-    "delete_department_failed_notification_desc": "The department could not be deleted due to: $reason",
-
-    "update_department_success_notification_title": "Updated Successfully",
-    "update_department_success_notification_desc": "The department details have been updated successfully.",
-
-    "update_department_failed_notification_title": "Update Failed",
-    "update_department_failed_notification_desc": "The department details could not be updated due to: $reason",
-
     "serial": "Device Serial Number",
     "model": "Device Model",
     "type": "Device Type",
@@ -280,5 +268,46 @@
     "result_in_users": "Found in Users",
     "result_in_devices": "Found in Devices",
 
-    "no_results": "No Results"
+    "no_results": "No Results",
+
+    "user_success_title_general": "Operation Successful",
+    "user_success_message_general": "The operation related to the user was completed successfully.",
+    "user_success_title_create": "User Created Successfully",
+    "user_success_message_create": "The new user has been created successfully.",
+    "user_success_title_update": "User Updated Successfully",
+    "user_success_message_update": "The user data has been updated successfully.",
+    "user_success_title_delete": "User Deleted Successfully",
+    "user_success_message_delete": "The user has been deleted successfully.",
+
+    "user_failed_title_general": "Operation Failed",
+    "user_failed_message_general": "The operation related to the user failed due to: $reason",
+    "user_failed_title_create": "User Creation Failed",
+    "user_failed_message_create": "Failed to create the user due to: $reason",
+    "user_failed_title_update": "User Update Failed",
+    "user_failed_message_update": "Failed to update the user due to: $reason",
+    "user_failed_title_delete": "User Deletion Failed",
+    "user_failed_message_delete": "Failed to delete the user due to: $reason",
+
+    "departments_search_404": "No matching departments were found for your search.",
+
+    "department_success_title_general": "Operation Successful",
+    "department_success_message_general": "The requested action regarding departments was completed successfully.",
+    "department_success_title_fetch": "Department Data Retrieved",
+    "department_success_message_fetch": "The department data was retrieved successfully.",
+    "department_success_title_update": "Updated Successfully",
+    "department_success_message_update": "The department details have been updated successfully.",
+    "department_success_title_delete": "Deleted Successfully",
+    "department_success_message_delete": "The department and all its associated sub-departments have been deleted successfully.",
+
+    "department_failed_title_general": "Operation Not Completed",
+    "department_failed_message_general": "Unable to complete the requested action regarding departments due to: $reason",
+    "department_failed_title_fetch": "Failed to Retrieve Department Data",
+    "department_failed_message_fetch": "The department data could not be retrieved due to: $reason",
+    "department_failed_title_update": "Update Failed",
+    "department_failed_message_update": "The department details could not be updated due to: $reason",
+    "department_failed_title_delete": "Deletion Failed",
+    "department_failed_message_delete": "The department could not be deleted due to: $reason",
+
+    "search_departments": "Search for a department...",
+    "update_department_btn": "Update Department"
 }

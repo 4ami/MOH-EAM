@@ -40,35 +40,7 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: BlocListener<DepartmentBloc, DepartmentState>(
-        listener: (context, state) {
-          if (state.event is DepartmentSuccessEvent) {
-            setState(() {
-              if (state.children.isNotEmpty) {
-                int level = state.children[0].level;
-                levelChildren[level] = state.children;
-              }
-            });
-          }
-
-          if (state.event is DepartmentAddedEvent) {
-            context.successToast(
-              title: context.translate(key: 'add_new_department'),
-              description: context.translate(
-                key: 'department_added_successfully',
-              ),
-            );
-            context.pop();
-            return;
-          }
-
-          if (state.event is AddDepartmentFailedEvent) {
-            context.errorToast(
-              title: context.translate(key: 'department_adding_failed'),
-              description: context.translate(key: state.event.message),
-            );
-            return;
-          }
-        },
+        listener: _departmentListener,
         child: Container(
           padding: EdgeInsets.all(25),
           margin: EdgeInsets.only(
@@ -87,11 +59,13 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildField(
                     controller: _nameARController,
                     label: context.translate(key: 'name_ar'),
-                    validator: (ar) => ValidationHelper.fullName(ar, context),
+                    validator: (ar) =>
+                        ValidationHelper.fullName(ar, context, isAr: true),
                     onChanged: (n) {
                       //  Handle name AR changes if needed
                     },
@@ -100,7 +74,8 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
                   _buildField(
                     controller: _nameENController,
                     label: context.translate(key: 'name_en'),
-                    validator: (en) => ValidationHelper.fullName(en, context),
+                    validator: (en) =>
+                        ValidationHelper.fullName(en, context, isAr: false),
                     onChanged: (n) {
                       //  Handle name EN changes if needed
                     },
@@ -130,7 +105,8 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
 
                   _buildField(
                     controller: _levelNameController,
-                    validator: (ln) => ValidationHelper.fullName(ln, context),
+                    validator: (ln) =>
+                        ValidationHelper.fullName(ln, context, isAr: null),
                     label: context.translate(key: 'level_name'),
                     onChanged: (n) {
                       //  Handle level name changes if needed
@@ -142,14 +118,23 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
                       child: DropdownButtonFormField<String>(
                         validator: (v) => ValidationHelper.dropDown(v, context),
                         value: rootId,
+                        isExpanded: true,
                         decoration: InputDecoration(
-                          labelText: context.translate(key: 'root_departments'),
+                          label: Text(
+                            context.translate(key: 'root_departments'),
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                          ),
                           border: OutlineInputBorder(),
                         ),
                         items: List.generate(roots.length, (i) {
                           return DropdownMenuItem(
                             value: roots[i].id,
-                            child: Text(roots[i].name),
+                            child: Text(
+                              roots[i].name,
+                              overflow: TextOverflow.fade,
+                              maxLines: 1,
+                            ),
                           );
                         }),
                         onChanged: !_isRightParent
@@ -198,6 +183,10 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
                             setState(() {
                               _isRightParent = value ?? false;
                               //  Stop loading more children when confirmed
+                              levelChildren.removeWhere((level, d) {
+                                return levelSelected[level] == null ||
+                                    levelSelected[level]!.isEmpty;
+                              });
                             });
                           },
                         ),
@@ -214,6 +203,54 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
     );
   }
 
+  void _departmentListener(BuildContext context, DepartmentState state) {
+    if (state.event is DepartmentSuccessEventSealed) {
+      var t = context.translate;
+      var success = state.event as DepartmentSuccessEventSealed;
+      if (success is DepartmentSuccessEvent) {
+        setState(() {
+          if (state.children.isNotEmpty) {
+            int level = state.children[0].level;
+            levelChildren[level] = state.children;
+          }
+        });
+        return;
+      }
+
+      String title = t(key: success.title);
+      String description = t(key: success.message);
+      context.successToast(title: title, description: description);
+
+      if (success is DepartmentAddedEvent) context.pop();
+      return;
+    }
+
+    if (state.event is DepartmentFailedEvent) {
+      var t = context.translate;
+      var failed = state.event as DepartmentFailedEvent;
+
+      String title = t(key: failed.title);
+      String description = t(
+        key: failed.message,
+      ).replaceAll('\$reason', t(key: failed.reason));
+
+      context.errorToast(title: title, description: description);
+      return;
+    }
+
+    if (state.event is DeleteDepartmentSuccess) {
+      context.successToast(
+        title: context.translate(
+          key: 'delete_department_success_notification_title',
+        ),
+        description: context.translate(
+          key: 'delete_department_success_notification_desc',
+        ),
+      );
+      return;
+    }
+  }
+
   List<Widget>? _buildChildrenDropDown() {
     return levelChildren.entries.map((e) {
       final level = e.key;
@@ -222,6 +259,7 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
       return Padding(
         padding: const EdgeInsets.all(16),
         child: DropdownButtonFormField<String>(
+          isExpanded: true,
           value: levelSelected[level],
           decoration: InputDecoration(
             labelText: context
@@ -260,16 +298,16 @@ class _CreateDepartmentWidgetState extends State<CreateDepartmentWidget> {
   }
 
   Padding _submitButton(BuildContext context) {
+    var w = context.watch<DepartmentBloc>();
+    bool confirmed = _isRightParent || _isRoot;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed:
-              context.watch<DepartmentBloc>().state.event
-                  is DepartmentLoadingEvent
+          onPressed: w.state.event is DepartmentLoadingEvent
               ? null
-              : !_isRightParent
+              : !confirmed
               ? null
               : _submitForm,
           style: ElevatedButton.styleFrom(

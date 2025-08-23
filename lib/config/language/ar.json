@@ -169,18 +169,6 @@
     "delete_root_confirmation_message": "تنبيه: هذا قسم رئيسي، وحذفه سيؤدي إلى إزالة جميع الأقسام الفرعية المرتبطة به بشكل نهائي.",
     "delete_department_confirmation_message": "هل أنت متأكد من حذف هذا القسم؟ هذا الإجراء غير قابل للتراجع، وسيؤدي إلى حذف جميع الأقسام الفرعية المرتبطة به بشكل نهائي.",
 
-    "delete_department_success_notification_title": "تم الحذف بنجاح",
-    "delete_department_success_notification_desc": "تم حذف القسم وجميع أقسامه الفرعية المرتبطة به بنجاح.",
-
-    "delete_department_failed_notification_title": "فشل الحذف",
-    "delete_department_failed_notification_desc": "فشلت عملية حذف القسم بسبب: $reason",
-
-    "update_department_success_notification_title": "تم التحديث بنجاح",
-    "update_department_success_notification_desc": "تم تحديث بيانات القسم بنجاح.",
-
-    "update_department_failed_notification_title": "فشل التحديث",
-    "update_department_failed_notification_desc": "فشلت عملية تحديث بيانات القسم بسبب: $reason",
-
     "serial": "الرقم التسلسلي للجهاز",
     "model": "طراز الجهاز",
     "type": "نوع الجهاز",
@@ -278,5 +266,56 @@
     "result_in_users": "تم العثور عليه في المستخدمين",
     "result_in_devices": "تم العثور عليه في الأجهزة",
 
-    "no_results": "لا يوجد نتائج"
+    "no_results": "لا يوجد نتائج",
+
+    "user_success_title_general": "تمت العملية بنجاح",
+    "user_success_message_general": "تم تنفيذ العملية المتعلقة بالمستخدم بنجاح.",
+    "user_success_title_create": "تمت إضافة المستخدم بنجاح",
+    "user_success_message_create": "تم إنشاء المستخدم الجديد بنجاح.",
+    "user_success_title_update": "تم تحديث المستخدم بنجاح",
+    "user_success_message_update": "تم تحديث بيانات المستخدم بنجاح.",
+    "user_success_title_delete": "تم حذف المستخدم بنجاح",
+    "user_success_message_delete": "تم حذف المستخدم بنجاح.",
+
+    "user_failed_title_general": "فشل في تنفيذ العملية",
+    "user_failed_message_general": "فشلت عملية تنفيذ الإجراء المتعلق بالمستخدم بسبب: $reason",
+    "user_failed_title_create": "فشل في إضافة المستخدم",
+    "user_failed_message_create": "فشلت عملية إنشاء المستخدم بسبب: $reason",
+    "user_failed_title_update": "فشل في تحديث المستخدم",
+    "user_failed_message_update": "فشلت عملية تحديث المستخدم بسبب: $reason",
+    "user_failed_title_delete": "فشل في حذف المستخدم",
+    "user_failed_message_delete": "فشلت عملية حذف المستخدم بسبب: $reason",
+
+    "departments_search_404": "لم يتم العثور على أي إدارات مطابقة لعملية البحث.",
+
+    "department_success_title_general": "تمت العملية بنجاح",
+    "department_success_message_general": "تم تنفيذ المطلوب بخصوص الإدارات بنجاح.",
+    "department_success_title_fetch": "تم جلب بيانات الإدارة بنجاح",
+    "department_success_message_fetch": "تم استرجاع بيانات الإدارة بنجاح.",
+    "department_success_title_update": "تم التحديث بنجاح",
+    "department_success_message_update": "تم تحديث بيانات القسم بنجاح.",
+    "department_success_title_delete": "تم الحذف بنجاح",
+    "department_success_message_delete": "تم حذف القسم وجميع أقسامه الفرعية المرتبطة به بنجاح.",
+    "department_success_title_create": "تمت إضافة الإدارة بنجاح",
+    "department_success_message_create": "تم إنشاء الإدارة الجديدة بنجاح.",
+    "department_success_title_search": "تم البحث بنجاح",
+    "department_success_message_search": "تم العثور على نتائج البحث المتعلقة بالإدارة بنجاح.",
+
+    
+    
+    "department_failed_title_general": "ما تمت العملية",
+    "department_failed_message_general": "تعذّر تنفيذ المطلوب بخصوص الإدارات بسبب: $reason",
+    "department_failed_title_fetch": "فشل في جلب بيانات الإدارة",
+    "department_failed_message_fetch": "فشلت عملية استرجاع بيانات الإدارة بسبب: $reason",
+    "department_failed_title_update": "فشل التحديث",
+    "department_failed_message_update": "فشلت عملية تحديث بيانات القسم بسبب: $reason",
+    "department_failed_title_delete": "فشل الحذف",
+    "department_failed_message_delete": "فشلت عملية حذف القسم بسبب: $reason",
+    "department_failed_title_create": "فشل في إضافة الإدارة",
+    "department_failed_message_create": "فشلت عملية إنشاء الإدارة بسبب: $reason",
+    "department_failed_title_search": "فشل في البحث",
+    "department_failed_message_search": "تعذّر إتمام عملية البحث عن الإدارة بسبب: $reason",
+
+    "search_departments": "ابحث عن إدارة...",
+    "update_department_btn": "تحديث الإدارة"
 }

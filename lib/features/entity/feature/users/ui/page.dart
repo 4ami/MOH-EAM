@@ -11,6 +11,7 @@ import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
 import 'package:moh_eam/config/widget/pagination_filter.dart';
 import 'package:moh_eam/config/widget/widget_module.dart';
+import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
@@ -52,7 +53,17 @@ class _UsersViewState extends State<UsersView> {
           context: context,
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
-          builder: (context) => CreateUserWidget(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<DepartmentBloc>(
+                create: (context) => DepartmentBloc(),
+              ),
+              BlocProvider<UserEntityBloc>.value(
+                value: context.read<UserEntityBloc>(),
+              ),
+            ],
+            child: CreateUserWidget(),
+          ),
         );
       },
       label: Text(context.translate(key: 'create_user_btn_label')),
@@ -60,7 +71,34 @@ class _UsersViewState extends State<UsersView> {
     );
   }
 
-  void _listener(BuildContext context, UserEntityState state) {}
+  void _listener(BuildContext context, UserEntityState state) {
+    if (state.event is UserEntitySuccessEvent) {
+      var t = context.translate;
+      var success = state.event as UserEntitySuccessEvent;
+
+      if (success is FetchUserSuccessEvent) return;
+      String title = t(key: success.title);
+      String message = t(key: success.message);
+      context.successToast(title: title, description: message);
+      context.pop();
+      return;
+    }
+
+    if (state.event is UserEntityFailedEvent) {
+      var t = context.translate;
+      var failed = state.event as UserEntityFailedEvent;
+
+      String title = t(key: failed.title);
+      String description = t(
+        key: failed.message,
+      ).replaceAll('\$reason', t(key: failed.reason));
+
+      context.errorToast(title: title, description: description);
+      if (failed is FetchUserFailedEvent) return;
+      context.pop();
+      return;
+    }
+  }
 
   Widget _content() {
     var state = context.watch<UserEntityBloc>().state;

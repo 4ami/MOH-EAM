@@ -24,31 +24,34 @@ class _PaginationFilterState extends State<PaginationFilter> {
   Widget build(BuildContext context) {
     if (widget.maxPages < 1) return const SizedBox.shrink();
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 16,
-        children: [
-          // Previous button
-          _buildNavigationButton(
-            icon: Icons.chevron_left,
-            onTap: widget.currentPage > 1
-                ? () => widget.onPageSelect(widget.currentPage - 1)
-                : null,
-          ),
+    return FittedBox(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 16,
+          children: [
+            // Previous button
+            _buildNavigationButton(
+              icon: Icons.chevron_left,
+              onTap: widget.currentPage > 1
+                  ? () => widget.onPageSelect(widget.currentPage - 1)
+                  : null,
+            ),
 
-          // Page numbers
-          ..._buildPageNumbers(),
+            // Page numbers
+            ..._buildPageNumbers(),
 
-          // Next button
-          _buildNavigationButton(
-            icon: Icons.chevron_right,
-            onTap: widget.currentPage < widget.maxPages
-                ? () => widget.onPageSelect(widget.currentPage + 1)
-                : null,
-          ),
-        ],
+            // Next button
+            _buildNavigationButton(
+              icon: Icons.chevron_right,
+              onTap: widget.currentPage < widget.maxPages
+                  ? () => widget.onPageSelect(widget.currentPage + 1)
+                  : null,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,7 @@
 library;
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -7,7 +9,9 @@ import 'package:moh_eam/config/logging/logger.dart';
 import 'package:moh_eam/config/routing/_helpers/_routing_helpers_module.dart';
 import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
+import 'package:moh_eam/config/widget/pagination_filter.dart';
 import 'package:moh_eam/config/widget/widget_module.dart';
+import 'package:moh_eam/core/bloc/global_bloc_module.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
@@ -23,6 +27,8 @@ class DepartmentView extends StatefulWidget {
 }
 
 class _DepartmentViewState extends State<DepartmentView> {
+  String? query;
+  int page = 1;
   @override
   Widget build(BuildContext context) {
     bool canCreate = AuthorizationHelper.hasMinimumPermission(
@@ -33,66 +39,48 @@ class _DepartmentViewState extends State<DepartmentView> {
     return ResponsiveScaffold(
       appBar: _appBar(context.isMobile),
       body: BlocListener<DepartmentBloc, DepartmentState>(
-        listener: (context, state) {
-          if (state.event is DeleteDepartmentSuccess) {
-            context.successToast(
-              title: context.translate(
-                key: 'delete_department_success_notification_title',
-              ),
-              description: context.translate(
-                key: 'delete_department_success_notification_desc',
-              ),
-            );
-            return;
-          }
-
-          if (state.event is DepartmentDeleteFailedEvent) {
-            String desc = context.translate(
-              key: 'delete_department_failed_notification_desc',
-            );
-            String reason = context.translate(key: state.event.message);
-            desc = desc.replaceAll('\$reason', reason);
-
-            context.errorToast(
-              title: context.translate(
-                key: 'delete_department_failed_notification_title',
-              ),
-              description: desc,
-            );
-            return;
-          }
-
-          if (state.event is UpdateDepartmentSuccess) {
-            context.successToast(
-              title: context.translate(
-                key: 'update_department_success_notification_title',
-              ),
-              description: context.translate(
-                key: 'update_department_success_notification_desc',
-              ),
-            );
-            return;
-          }
-
-          if (state.event is DepartmentUpdateFailedEvent) {
-            String desc = context.translate(
-              key: 'update_department_failed_notification_desc',
-            );
-            String reason = context.translate(key: state.event.message);
-            desc = desc.replaceAll('\$reason', reason);
-            context.errorToast(
-              title: context.translate(
-                key: 'update_department_failed_notification_title',
-              ),
-              description: desc,
-            );
-            return;
-          }
-        },
+        listener: _departmentListener,
         child: _layout(),
       ),
       floatingActionButton: canCreate ? _addDepartment(context) : null,
     );
+  }
+
+  void _departmentListener(BuildContext context, DepartmentState state) {
+    if (state.event is DepartmentSuccessEventSealed) {
+      var t = context.translate;
+      var success = state.event as DepartmentSuccessEventSealed;
+
+      String title = t(key: success.title);
+      String description = t(key: success.message);
+      context.successToast(title: title, description: description);
+      return;
+    }
+
+    if (state.event is DepartmentFailedEvent) {
+      var t = context.translate;
+      var failed = state.event as DepartmentFailedEvent;
+
+      String title = t(key: failed.title);
+      String description = t(
+        key: failed.message,
+      ).replaceAll('\$reason', t(key: failed.reason));
+
+      context.errorToast(title: title, description: description);
+      return;
+    }
+
+    if (state.event is DeleteDepartmentSuccess) {
+      context.successToast(
+        title: context.translate(
+          key: 'delete_department_success_notification_title',
+        ),
+        description: context.translate(
+          key: 'delete_department_success_notification_desc',
+        ),
+      );
+      return;
+    }
   }
 
   FloatingActionButton _addDepartment(BuildContext context) {
@@ -103,13 +91,64 @@ class _DepartmentViewState extends State<DepartmentView> {
     );
   }
 
-  Widget _buildSearchBar() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: SearchField(
-        hintKey: 'search_departments',
-        callback: _onSearchQueryChanged,
-      ),
+  Widget _buildUtil({bool vertical = false}) {
+    if (vertical) {
+      return Column(
+        spacing: 10,
+        children: [
+          SearchField(
+            hintKey: 'search_departments',
+            callback: _onSearchQueryChanged,
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _onSearch,
+              child: Text(context.translate(key: 'search')),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Switch to vertical layout on small screens
+        if (constraints.maxWidth < 600) {
+          return _buildUtil(vertical: true);
+        }
+
+        return SizedBox(
+          width: math.min(
+            constraints.maxWidth * 0.95,
+            context.responsive.width(.75),
+          ),
+          child: Row(
+            children: [
+              // Flexible search field that takes available space
+              Expanded(
+                flex: 3,
+                child: SearchField(
+                  hintKey: 'search_departments',
+                  callback: _onSearchQueryChanged,
+                ),
+              ),
+              SizedBox(width: 10),
+              // Search button with constrained width
+              ConstrainedBox(
+                constraints: BoxConstraints(minWidth: 80, maxWidth: 120),
+                child: ElevatedButton(
+                  onPressed: _onSearch,
+                  child: Text(
+                    context.translate(key: 'search'),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -228,7 +267,7 @@ class _DepartmentViewState extends State<DepartmentView> {
           .where((dept) => dept.parentId == null || dept.level == 0)
           .toList();
 
-      if (rootDepartments.isEmpty) {
+      if (state.departments.isEmpty) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -265,6 +304,19 @@ class _DepartmentViewState extends State<DepartmentView> {
     }
 
     return SizedBox.shrink();
+  }
+
+  Widget _buildResults() {
+    var state = context.read<DepartmentBloc>().state;
+    var depts = state.departments;
+    depts.sort((p, n) => p.level.compareTo(n.level));
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      itemCount: depts.length,
+      itemBuilder: (context, index) {
+        return _buildDepartmentCard(depts[index]);
+      },
+    );
   }
 
   Widget _shimmer() {
@@ -341,6 +393,7 @@ class _DepartmentViewState extends State<DepartmentView> {
   }
 
   Widget _content() {
+    var w = context.watch<DepartmentBloc>();
     return Column(
       children: [
         Padding(
@@ -350,8 +403,27 @@ class _DepartmentViewState extends State<DepartmentView> {
             style: context.h5,
           ),
         ),
-        _buildSearchBar(),
-        Expanded(child: _buildDepartmentsList()),
+        _buildUtil(),
+        if (w.state.event is SearchInDepartmentSuccess)
+          Expanded(child: _buildResults())
+        else
+          Expanded(child: _buildDepartmentsList()),
+        if (w.state.event is DepartmentLoadingEvent)
+          PaginationFilter.render()
+        else if (w.state.event is SearchInDepartmentSuccess)
+          PaginationFilter(
+            maxPages: w.state.maxPage,
+            currentPage: page,
+            onPageSelect: (p) {
+              setState(() {
+                page = p;
+              });
+
+              _onSearch();
+            },
+          )
+        else
+          SizedBox.shrink(),
       ],
     );
   }
@@ -469,5 +541,30 @@ class _DepartmentViewState extends State<DepartmentView> {
     Logger.d('Search query: $query', tag: 'DepartmentView');
     // You can filter the departments or trigger a search in your bloc
     // context.read<DepartmentBloc>().add(SearchDepartmentsEvent(query));
+    setState(() {
+      this.query = query;
+    });
+  }
+
+  void _onSearch() {
+    if (query == null || query!.isEmpty) {
+      var auth = context.read<AuthBloc>().state as AuthenticatedState;
+      var lang = context.read<LanguageCubit>().state.languageCode;
+      var event = DepartmentFetchRootsEvent(token: auth.token, lang: lang);
+      context.read<DepartmentBloc>().add(event);
+      return;
+    }
+
+    var lang = context.read<LanguageCubit>().state.languageCode;
+    var a = context.read<AuthBloc>().state as AuthenticatedState;
+    var d = context.read<DepartmentBloc>();
+    var event = SearchForDepartmentEvent(
+      token: a.token,
+      query: query!,
+      lang: lang,
+      page: page,
+    );
+
+    d.add(event);
   }
 }

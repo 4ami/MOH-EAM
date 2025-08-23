@@ -6,6 +6,7 @@ import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_chi
 import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_departments_root_model.dart';
 import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_subtree.dart';
 import 'package:moh_eam/features/entity/feature/departments/data/model/fetch_tree.dart';
+import 'package:moh_eam/features/entity/feature/departments/data/model/search.dart';
 import 'package:moh_eam/features/entity/feature/departments/data/model/update_department.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/repositories/department_repo.dart';
 
@@ -114,6 +115,28 @@ final class DepartmentRepoImplementation implements DepartmentRepo {
           .replaceAll('\$lang', lang)
           .replaceAll('\$department', id),
       parser: (json) => FetchTreeResponse.fromJSON(json),
+    );
+  }
+
+  @override
+  Future<SearchInDepartments> search({
+    required String token,
+    required String query,
+    required String lang,
+    required int page,
+    required int limit,
+  }) async {
+    return await _client.get(
+      token: token,
+      queryParams: {
+        "query": Uri.encodeQueryComponent(query),
+        "page": Uri.encodeQueryComponent(page.toString()),
+        "limit": Uri.encodeQueryComponent(limit.toString()),
+      },
+      endpoint: _api.departmentSEARCH
+          .replaceAll('\$version', version)
+          .replaceAll('\$lang', lang),
+      parser: (json) => SearchInDepartments.fromJSON(json),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:moh_eam/config/routing/_helpers/_routing_helpers_module.dart';
 import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
 import 'package:moh_eam/config/widget/widget_module.dart';
+import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/ui/widgets/entity_widgets_module.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
@@ -34,23 +35,55 @@ class _UserDetailsViewState extends State<UserDetailsView> {
     return ResponsiveScaffold(
       appBar: _appBar(context.isMobile),
       drawer: Drawer(child: AdminDrawerBody()),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 17,
-                children: w.event is UserEntityLoadingEvent
-                    ? _render()
-                    : _content(hasEdit, hasDelete),
+      body: BlocListener<UserEntityBloc, UserEntityState>(
+        listener: (context, state) {
+          if (state.event is UserEntitySuccessEvent) {
+            if (state.event is FetchUserSuccessEvent) return;
+            var t = context.translate;
+            var success = state.event as UserEntitySuccessEvent;
+            String title = t(key: success.title);
+            String description = t(key: success.message);
+            context.successToast(title: title, description: description);
+            context.pop();
+
+            context.goNamed(AppRoutesInformation.userManagement.name);
+
+            return;
+          }
+
+          if (state.event is UserEntityFailedEvent) {
+            var t = context.translate;
+            var failed = state.event as UserEntityFailedEvent;
+            String title = t(key: failed.title);
+            String description = t(
+              key: failed.message,
+            ).replaceAll('\$reason', t(key: failed.reason));
+            context.errorToast(title: title, description: description);
+            context.pop();
+            return;
+          }
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 800),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 17,
+                  children: w.event is UserEntityLoadingEvent
+                      ? _render()
+                      : _content(hasEdit, hasDelete),
+                ),
               ),
             ),
           ),
@@ -105,7 +138,7 @@ class _UserDetailsViewState extends State<UserDetailsView> {
   void _onEdit() {
     var w = context.read<UserEntityBloc>().state;
 
-    if (w.event is UserEntitySuccessEvent && w.user != null) {
+    if (w.event is FetchUserSuccessEvent && w.user != null) {
       var pathParam = {"resource": 'users', "id": w.user?.id ?? ''};
       context.pushNamed(
         AppRoutesInformation.editUser.name,
@@ -132,6 +165,15 @@ class _UserDetailsViewState extends State<UserDetailsView> {
           TextButton(
             onPressed: () {
               //Delete then pop
+              var w = context.read<UserEntityBloc>().state;
+
+              if (w.event is FetchUserSuccessEvent && w.user != null) {
+                var a = context.read<AuthBloc>().state as AuthenticatedState;
+                context.read<UserEntityBloc>().add(
+                  DeleteUserEvent(token: a.token, user: w.user!.id),
+                );
+                return;
+              }
             },
             child: Text(
               context.translate(key: 'delete_action'),

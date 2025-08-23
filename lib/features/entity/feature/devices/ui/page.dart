@@ -75,6 +75,7 @@ class _DeviceViewState extends State<DeviceView> {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
+          backgroundColor: Colors.transparent,
           builder: (_) {
             return MultiBlocProvider(
               providers: [
@@ -215,6 +216,8 @@ class _DeviceViewState extends State<DeviceView> {
                     ),
                   );
                   // trigger search
+                  var a = context.read<AuthBloc>().state as AuthenticatedState;
+                  bloc.add(FetchDevicesEvent(token: a.token));
                 },
               )
             else
@@ -261,6 +264,8 @@ class _DeviceViewState extends State<DeviceView> {
                   ),
                 );
                 // trigger search
+                var a = context.read<AuthBloc>().state as AuthenticatedState;
+                bloc.add(FetchDevicesEvent(token: a.token));
               },
             ),
           )

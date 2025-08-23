@@ -153,7 +153,7 @@ class _CreateDeviceWidgetState extends State<CreateDeviceWidget> {
 
     final boolSwitch = _boolValues.entries.map((e) {
       return SwitchListTile.adaptive(
-        title: Text(t(key: e.key)),
+        title: Text(t(key: 'is_${e.key}?')),
         value: _boolValues[e.key]!,
         onChanged: (b) {
           setState(() {

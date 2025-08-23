@@ -13,6 +13,9 @@ class _DeviceFiltersWidgetState extends State<DeviceFiltersWidget> {
   @override
   Widget build(BuildContext context) {
     var deviceBloc = context.read<DeviceBloc>();
+    inDomain = deviceBloc.state.filters.inDomain;
+    kasperInstalled = deviceBloc.state.filters.kasperInstalled;
+    crowdStrikeInstalled = deviceBloc.state.filters.crowdStrikeInstalled;
     return Column(
       spacing: 15,
       children: [
@@ -38,6 +41,7 @@ class _DeviceFiltersWidgetState extends State<DeviceFiltersWidget> {
                 UpdateDeviceFilters(
                   filters: filters.copyWith(
                     inDomain: UpdateDeviceFilterTo(inDomain),
+                    page: UpdateDeviceFilterTo(1),
                   ),
                 ),
               );
@@ -58,6 +62,7 @@ class _DeviceFiltersWidgetState extends State<DeviceFiltersWidget> {
                 UpdateDeviceFilters(
                   filters: filters.copyWith(
                     inDomain: UpdateDeviceFilterTo(inDomain),
+                    page: UpdateDeviceFilterTo(1),
                   ),
                 ),
               );
@@ -85,6 +90,7 @@ class _DeviceFiltersWidgetState extends State<DeviceFiltersWidget> {
                 UpdateDeviceFilters(
                   filters: filters.copyWith(
                     kasperInstalled: UpdateDeviceFilterTo(kasperInstalled),
+                    page: UpdateDeviceFilterTo(1),
                   ),
                 ),
               );
@@ -105,6 +111,7 @@ class _DeviceFiltersWidgetState extends State<DeviceFiltersWidget> {
                 UpdateDeviceFilters(
                   filters: filters.copyWith(
                     kasperInstalled: UpdateDeviceFilterTo(kasperInstalled),
+                    page: UpdateDeviceFilterTo(1),
                   ),
                 ),
               );
@@ -134,6 +141,7 @@ class _DeviceFiltersWidgetState extends State<DeviceFiltersWidget> {
                     crowdStrikeInstalled: UpdateDeviceFilterTo(
                       crowdStrikeInstalled,
                     ),
+                    page: UpdateDeviceFilterTo(1),
                   ),
                 ),
               );
@@ -160,6 +168,7 @@ class _DeviceFiltersWidgetState extends State<DeviceFiltersWidget> {
                     crowdStrikeInstalled: UpdateDeviceFilterTo(
                       crowdStrikeInstalled,
                     ),
+                    page: UpdateDeviceFilterTo(1),
                   ),
                 ),
               );

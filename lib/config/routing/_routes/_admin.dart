@@ -98,6 +98,10 @@ final class _Admin implements _RouteInterface {
       'CREATE',
     );
 
+    if (authState.user.role == 'guest') {
+      return AppRoutesInformation.signin.path;
+    }
+
     if (userCREATE ||
         userEdit ||
         deviceCREATE ||

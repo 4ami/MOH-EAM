@@ -23,65 +23,47 @@ class _DepartmentViewerState extends State<DepartmentViewer> {
     return ResponsiveScaffold(
       appBar: _appBar(context.isMobile),
       body: BlocListener<DepartmentBloc, DepartmentState>(
-        listener: (context, state) {
-          if (state.event is DeleteDepartmentSuccess) {
-            context.successToast(
-              title: context.translate(
-                key: 'delete_department_success_notification_title',
-              ),
-              description: context.translate(
-                key: 'delete_department_success_notification_desc',
-              ),
-            );
-            return;
-          }
-
-          if (state.event is DepartmentDeleteFailedEvent) {
-            String desc = context.translate(
-              key: 'delete_department_failed_notification_desc',
-            );
-            String reason = context.translate(key: state.event.message);
-            desc = desc.replaceAll('\$reason', reason);
-
-            context.errorToast(
-              title: context.translate(
-                key: 'delete_department_failed_notification_title',
-              ),
-              description: desc,
-            );
-            return;
-          }
-
-          if (state.event is UpdateDepartmentSuccess) {
-            context.successToast(
-              title: context.translate(
-                key: 'update_department_success_notification_title',
-              ),
-              description: context.translate(
-                key: 'update_department_success_notification_desc',
-              ),
-            );
-            return;
-          }
-
-          if (state.event is DepartmentUpdateFailedEvent) {
-            String desc = context.translate(
-              key: 'update_department_failed_notification_desc',
-            );
-            String reason = context.translate(key: state.event.message);
-            desc = desc.replaceAll('\$reason', reason);
-            context.errorToast(
-              title: context.translate(
-                key: 'update_department_failed_notification_title',
-              ),
-              description: desc,
-            );
-            return;
-          }
-        },
+        listener: _departmentListener,
         child: _buildBody(),
       ),
     );
+  }
+
+  void _departmentListener(BuildContext context, DepartmentState state) {
+    if (state.event is DepartmentSuccessEventSealed) {
+      var t = context.translate;
+      var success = state.event as DepartmentSuccessEventSealed;
+
+      String title = t(key: success.title);
+      String description = t(key: success.message);
+      context.successToast(title: title, description: description);
+      return;
+    }
+
+    if (state.event is DepartmentFailedEvent) {
+      var t = context.translate;
+      var failed = state.event as DepartmentFailedEvent;
+
+      String title = t(key: failed.title);
+      String description = t(
+        key: failed.message,
+      ).replaceAll('\$reason', t(key: failed.reason));
+
+      context.errorToast(title: title, description: description);
+      return;
+    }
+
+    if (state.event is DeleteDepartmentSuccess) {
+      context.successToast(
+        title: context.translate(
+          key: 'delete_department_success_notification_title',
+        ),
+        description: context.translate(
+          key: 'delete_department_success_notification_desc',
+        ),
+      );
+      return;
+    }
   }
 
   Widget _buildBody() {

@@ -38,7 +38,7 @@ final class CreateUserResponse extends BaseResponse {
       code: json['code'] ?? -1,
       message: json['message'] ?? '',
       messageKey: json['message_key'] ?? '',
-      user: UserModel.fromJSON(json),
+      user: UserModel.fromJSON(json['user']),
     );
   }
 }
