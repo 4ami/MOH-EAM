@@ -5,8 +5,9 @@ class EditableTextField extends StatelessWidget {
     super.key,
     required this.label,
     required this.controller,
+    this.validator,
   });
-
+  final String? Function(String?)? validator;
   final String label;
   final TextEditingController controller;
 
@@ -14,8 +15,10 @@ class EditableTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
+        validator: validator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
           labelText: context.translate(key: label),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),

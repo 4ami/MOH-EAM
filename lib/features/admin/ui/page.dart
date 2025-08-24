@@ -2,14 +2,16 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moh_eam/config/routing/_helpers/_routing_helpers_module.dart';
 import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
 import 'package:moh_eam/config/widget/widget_module.dart';
 import 'package:moh_eam/core/bloc/global_bloc_module.dart';
 import 'package:moh_eam/features/admin/admin_module.dart';
 import 'package:moh_eam/features/admin/bloc/bloc.dart';
+import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 export 'widgets/admin_widgets_module.dart';
-export 'views/admin_views_module.dart';
 
 class AdminMain extends StatefulWidget {
   const AdminMain({super.key});
@@ -21,6 +23,13 @@ class AdminMain extends StatefulWidget {
 class _AdminMainState extends State<AdminMain> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _statisticsLoading = false;
+  final TextEditingController controller = TextEditingController();
+  final _fromKey = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +64,26 @@ class _AdminMainState extends State<AdminMain> {
       setState(() => _statisticsLoading = false);
       return;
     }
+
+    if (state.event is AdminGlobalSearchSuccess) {
+      context.pushNamed(
+        AppRoutesInformation.searchResults.name,
+        extra: context.read<AdminBloc>(),
+      );
+      return;
+    }
+
+    if (state.event is AdminGlobalSearchFailed) {
+      var t = context.translate;
+      var f = state.event as AdminGlobalSearchFailed;
+      String title = t(key: f.title);
+      String description = t(
+        key: f.message,
+      ).replaceAll('\$reason', t(key: f.reason));
+
+      context.errorToast(title: title, description: description);
+      return;
+    }
   }
 
   Widget _layout() {
@@ -68,6 +97,7 @@ class _AdminMainState extends State<AdminMain> {
   }
 
   SingleChildScrollView _content() {
+    var w = context.watch<AdminBloc>().state;
     return SingleChildScrollView(
       child: Padding(
         padding: context.pagePadding,
@@ -91,7 +121,27 @@ class _AdminMainState extends State<AdminMain> {
                 style: context.bodyLarge,
               ),
             ),
-            AdminSearchBar(),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 25,
+              children: [
+                Form(
+                  key: _fromKey,
+                  child: AdminSearchBar(controller: controller),
+                ),
+                ElevatedButton.icon(
+                  onPressed: w.event is AdminLoadEvent ? null : _search,
+                  label: Text(context.translate(key: 'search')),
+                  icon: w.event is AdminLoadEvent
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(),
+                        )
+                      : Icon(Icons.search),
+                ),
+              ],
+            ),
             QuickAccessCards(),
             _section('dashboard_visuals'),
             if (_statisticsLoading)
@@ -102,6 +152,16 @@ class _AdminMainState extends State<AdminMain> {
         ),
       ),
     );
+  }
+
+  void _search() {
+    if (_fromKey.currentState?.validate() == true) {
+      var a = context.read<AuthBloc>().state as AuthenticatedState;
+      var q = controller.text.trim();
+      context.read<AdminBloc>().add(
+        AdminGlobalSearchEvent(token: a.token, query: q),
+      );
+    }
   }
 
   Widget _section(String key) {

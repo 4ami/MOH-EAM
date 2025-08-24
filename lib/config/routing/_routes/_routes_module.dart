@@ -6,19 +6,29 @@ import 'package:go_router/go_router.dart';
 import 'package:moh_eam/config/logging/logger.dart';
 import 'package:moh_eam/config/routing/_helpers/_routing_helpers_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
+import 'package:moh_eam/core/bloc/global_bloc_module.dart';
 import 'package:moh_eam/core/domain/entity/entity_model.dart';
 import 'package:moh_eam/features/admin/admin_module.dart';
 import 'package:moh_eam/features/admin/bloc/bloc.dart';
+import 'package:moh_eam/features/admin/ui/view/search_result.dart';
 import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
+import 'package:moh_eam/features/entity/feature/departments/ui/page.dart';
+import 'package:moh_eam/features/entity/feature/departments/ui/view/department_viewer.dart';
+import 'package:moh_eam/features/entity/feature/devices/bloc/bloc.dart';
+import 'package:moh_eam/features/entity/feature/devices/ui/page.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/ui/view/user_detail.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 import 'package:moh_eam/features/entity/ui/page.dart';
 import 'package:moh_eam/features/error/ui/page.dart';
 import 'package:moh_eam/features/entity/feature/users/ui/view/edit_user.dart';
 import 'package:moh_eam/features/entity/feature/users/users_module.dart';
 import 'package:moh_eam/features/auth/auth_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
+import 'package:moh_eam/features/guest/bloc/bloc.dart';
+import 'package:moh_eam/features/guest/ui/page.dart';
+import 'package:moh_eam/features/roles/bloc/bloc.dart';
+import 'package:moh_eam/features/roles/ui/page.dart';
 import 'package:moh_eam/features/splash/splash_module.dart';
 
 part '_route_interface.dart';
@@ -26,6 +36,7 @@ part '_splash.dart';
 part '_signin.dart';
 part '_admin.dart';
 part '_entity_viewer.dart';
+part '_guest.dart';
 
 final class AppRoutes {
   const AppRoutes._();
@@ -38,6 +49,7 @@ final class AppRoutes {
       _SigninRoute().page,
       _Admin().page,
       // _EntityViewerPage().page,
+      _GuestRoute().page,
     ];
   }
 }

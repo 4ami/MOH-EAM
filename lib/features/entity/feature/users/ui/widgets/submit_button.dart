@@ -4,15 +4,16 @@ class SaveButton extends StatelessWidget {
   const SaveButton({
     super.key,
     this.labelKey = 'save_changes',
+    this.icon,
     required this.onPressed,
   });
   final String labelKey;
-  final VoidCallback onPressed;
-
+  final VoidCallback? onPressed;
+  final Widget? icon;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      icon: const Icon(Icons.save_outlined),
+      icon: icon ?? const Icon(Icons.save_outlined),
       label: Text(
         context.translate(key: labelKey),
         textScaler: TextScaler.linear(.8),

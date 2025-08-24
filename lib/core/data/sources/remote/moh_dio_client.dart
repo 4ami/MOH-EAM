@@ -35,7 +35,7 @@ class MOHDioClient {
   String _processPathParams(String endpoint, Map<String, dynamic>? pathParams) {
     if (pathParams == null) return endpoint;
     pathParams.forEach((k, v) {
-      endpoint.replaceAll('{$k}', Uri.encodeComponent(v.toString()));
+      endpoint.replaceAll('\$$k', Uri.encodeComponent(v.toString()));
     });
     return endpoint;
   }
@@ -161,6 +161,27 @@ class MOHDioClient {
       return parser(response.data);
     } on DioException catch (e) {
       Logger.e('Request Failed', tag: 'Client[PUT]', error: e);
+      throw _handleDioError(e);
+    }
+  }
+
+  Future<T> patch<T extends BaseResponse>({
+    required String endpoint,
+    required BaseRequest body,
+    required T Function(dynamic) parser,
+    Map<String, dynamic>? pathParams,
+    Options? options,
+    String? token,
+  }) async {
+    try {
+      final response = await _mohDio.patch(
+        _processPathParams(endpoint, pathParams),
+        data: body.encoded,
+        options: _addAuthHeader(options, token),
+      );
+      return parser(response.data);
+    } on DioException catch (e) {
+      Logger.e('Request Failed', tag: 'Client[POST]', error: e);
       throw _handleDioError(e);
     }
   }

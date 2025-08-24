@@ -1,5 +1,5 @@
 import 'package:moh_eam/core/domain/entity/entity_model.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
 class DeviceEntity extends EntityModel {
   final String id, serial, model, type;
@@ -34,6 +34,18 @@ class DeviceEntity extends EntityModel {
     if (user != null) ...user?.columns ?? <String>[],
   ];
 
+  static List<String> get tableCols => [
+    'id',
+    'serial',
+    'model',
+    'type',
+    'host_name',
+    'is_in_domain?',
+    'is_kasper_installed?',
+    'is_crowdstrike_installed?',
+    ...UserEntity.tableCols,
+  ];
+
   @override
   List<String> get props => [
     'id',
@@ -55,9 +67,9 @@ class DeviceEntity extends EntityModel {
       'model': model,
       'type': type,
       'host_name': hostName ?? '',
-      'in_domain': inDomain ?? false,
-      'kasper_installed': kasperInstalled ?? false,
-      'crowd_strike_installed': crowdStrikeInstalled ?? false,
+      'is_in_domain?': inDomain ?? false,
+      'is_kasper_installed?': kasperInstalled ?? false,
+      'is_crowdstrike_installed?': crowdStrikeInstalled ?? false,
       if (user != null) ...user!.toTableRow(),
     };
   }

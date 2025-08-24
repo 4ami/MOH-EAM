@@ -52,7 +52,20 @@ class _EntityViewerPage implements _RouteInterface {
           return const NoTransitionPage(child: ErrorPage());
         }
         var userEntity = state.extra as UserEntity;
-        return NoTransitionPage(child: EditUserPage(userEntity: userEntity));
+        return NoTransitionPage(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<DepartmentBloc>(
+                create: (context) => DepartmentBloc(),
+              ),
+              BlocProvider<UserEntityBloc>(
+                create: (context) => UserEntityBloc(),
+              ),
+            ],
+
+            child: EditUserPage(userEntity: userEntity),
+          ),
+        );
       },
     ),
   ];

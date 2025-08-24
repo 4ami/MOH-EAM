@@ -65,6 +65,7 @@ abstract class APIConfig {
   String get authentication;
   String get authToken;
   String get roles;
+  String get roleDELETE;
 
   String get deviceCREATE;
   String get allDevices;
@@ -77,9 +78,18 @@ abstract class APIConfig {
   String get departmentCREATE;
   String get departmentUPDATE;
   String get departmentDELETE;
+  String get departmentSEARCH;
 
   String get usersFetch;
   String get userDetails;
+  String get userCREATE;
+  String get userUPDATE;
+  String get userDELETE;
+  String get userStatistics;
+
+  String get globalSearch;
+
+  String get profile;
 
   /// Load and prepare any necessary configuration resources.
   ///
@@ -191,6 +201,9 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get roles => get(key: 'AUTH.roles');
 
   @override
+  String get roleDELETE => get(key: 'AUTH.role_delete');
+
+  @override
   String get deviceCREATE => get(key: 'DEVICES.create');
 
   @override
@@ -209,7 +222,7 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get departmentSubtree => get(key: 'DEPARTMENTS.subtree');
 
   @override
-  String get departmentChildren => get(key: 'DEVICES.children');
+  String get departmentChildren => get(key: 'DEPARTMENTS.children');
 
   @override
   String get departmentCREATE => get(key: 'DEPARTMENTS.create');
@@ -221,10 +234,31 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get departmentDELETE => get(key: 'DEPARTMENTS.delete');
 
   @override
+  String get departmentSEARCH => get(key: 'DEPARTMENTS.search');
+
+  @override
   String get usersFetch => get(key: 'USERS.FETCH_USERS');
 
   @override
   String get userDetails => get(key: 'USERS.FETCH_DETAILS');
+
+  @override
+  String get userCREATE => get(key: 'AUTH.create_user');
+
+  @override
+  String get userUPDATE => get(key: 'USERS.UPDATE');
+
+  @override
+  String get userDELETE => get(key: 'USERS.DELETE');
+
+  @override
+  String get userStatistics => get(key: 'USERS.STATS');
+
+  @override
+  String get globalSearch => get(key: 'GLOBAL_SEARCH');
+
+  @override
+  String get profile => get(key: 'PROFILE');
 }
 
 /// Production environment implementation of [APIConfig].
@@ -263,6 +297,9 @@ final class _$Production implements APIConfig {
   String get roles => String.fromEnvironment('ROLES');
 
   @override
+  String get roleDELETE => String.fromEnvironment('ROLE_DELETE');
+
+  @override
   String get deviceCREATE => String.fromEnvironment('DEVICE_CREATE');
 
   @override
@@ -294,10 +331,31 @@ final class _$Production implements APIConfig {
   String get departmentDELETE => String.fromEnvironment('DEPARTMENT_DELETE');
 
   @override
+  String get departmentSEARCH => String.fromEnvironment('DEPARTMENT_SEARCH');
+
+  @override
   String get usersFetch => String.fromEnvironment('FETCH_USERS');
 
   @override
   String get userDetails => String.fromEnvironment('USER_DETAILS');
+
+  @override
+  String get userCREATE => String.fromEnvironment('CREATE_USER');
+
+  @override
+  String get userUPDATE => String.fromEnvironment('UPDATE_USER');
+
+  @override
+  String get userDELETE => String.fromEnvironment('DELETE_USER');
+
+  @override
+  String get userStatistics => String.fromEnvironment('USER_STATISTICS');
+
+  @override
+  String get globalSearch => String.fromEnvironment('GLOBAL_SEARCH');
+
+  @override
+  String get profile => String.fromEnvironment('PROFILE');
 }
 
 /// Utility to determine the active [Environment] at runtime.

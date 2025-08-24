@@ -34,7 +34,7 @@ class EntityCard<T extends EntityModel> extends StatelessWidget {
             ),
             _sub(props, context, map),
 
-            _showMore(context),
+            if (entity is! DeviceEntity) _showMore(context),
           ],
         ),
       ),
@@ -52,19 +52,45 @@ class EntityCard<T extends EntityModel> extends StatelessWidget {
       children: props.map((prop) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SelectableText(
               '${context.translate(key: prop)}:',
-              style: context.titleMedium!.copyWith(fontWeight: FontWeight.bold),
-            ),
-            SelectableText(
-              map[prop].toString(),
+              style: context.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+                decoration: (map[prop] is String && map[prop].isEmpty)
+                    ? TextDecoration.lineThrough
+                    : null,
+              ),
               textScaler: TextScaler.linear(.8),
             ),
+            Expanded(child: _buildVal(prop, map[prop], context)),
           ],
         );
       }).toList(),
     );
+  }
+
+  SelectableText _buildVal(String key, dynamic value, BuildContext context) {
+    if (value == null) {
+      return SelectableText('NA', textScaler: TextScaler.linear(.8));
+    }
+
+    if (value is String && value.isEmpty) {
+      return SelectableText('-', textScaler: TextScaler.linear(.8));
+    }
+
+    if (value is bool && key.startsWith('is')) {
+      return SelectableText(
+        context.translate(key: '${value}_state'),
+        textScaler: TextScaler.linear(.8),
+        style: context.bodyLarge!.copyWith(
+          color: value ? Colors.greenAccent : context.error,
+        ),
+      );
+    }
+    return SelectableText(value.toString(), textScaler: TextScaler.linear(.8));
   }
 
   SizedBox _showMore(BuildContext context) {

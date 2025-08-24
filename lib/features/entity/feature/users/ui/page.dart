@@ -11,10 +11,12 @@ import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
 import 'package:moh_eam/config/widget/pagination_filter.dart';
 import 'package:moh_eam/config/widget/widget_module.dart';
+import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
-import 'package:moh_eam/features/auth/domain/entities/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/ui/view/create_user.dart';
 
 export 'widgets/users_widgets_module.dart';
 
@@ -28,17 +30,75 @@ class UsersView extends StatefulWidget {
 class _UsersViewState extends State<UsersView> {
   @override
   Widget build(BuildContext context) {
+    bool canCreate = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'users',
+      'CREATE',
+    );
     return BlocListener<UserEntityBloc, UserEntityState>(
       listener: _listener,
       child: ResponsiveScaffold(
         appBar: _appBar(context.isMobile),
         drawer: Drawer(child: AdminDrawerBody()),
         body: _layout(),
+        floatingActionButton: canCreate ? _addUser(context) : null,
       ),
     );
   }
 
-  void _listener(BuildContext context, UserEntityState state) {}
+  FloatingActionButton _addUser(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<DepartmentBloc>(
+                create: (context) => DepartmentBloc(),
+              ),
+              BlocProvider<UserEntityBloc>.value(
+                value: context.read<UserEntityBloc>(),
+              ),
+            ],
+            child: CreateUserWidget(),
+          ),
+        );
+      },
+      label: Text(context.translate(key: 'create_user_btn_label')),
+      icon: Icon(Icons.add),
+    );
+  }
+
+  void _listener(BuildContext context, UserEntityState state) {
+    if (state.event is UserEntitySuccessEvent) {
+      var t = context.translate;
+      var success = state.event as UserEntitySuccessEvent;
+
+      if (success is FetchUserSuccessEvent) return;
+      String title = t(key: success.title);
+      String message = t(key: success.message);
+      context.successToast(title: title, description: message);
+      context.pop();
+      return;
+    }
+
+    if (state.event is UserEntityFailedEvent) {
+      var t = context.translate;
+      var failed = state.event as UserEntityFailedEvent;
+
+      String title = t(key: failed.title);
+      String description = t(
+        key: failed.message,
+      ).replaceAll('\$reason', t(key: failed.reason));
+
+      context.errorToast(title: title, description: description);
+      if (failed is FetchUserFailedEvent) return;
+      context.pop();
+      return;
+    }
+  }
 
   Widget _content() {
     var state = context.watch<UserEntityBloc>().state;
@@ -63,6 +123,11 @@ class _UsersViewState extends State<UsersView> {
                     UserEntitySearchFiltersChanged(page: UpdateTo(p)),
                   );
                   // trigger search
+                  var auth =
+                      context.read<AuthBloc>().state as AuthenticatedState;
+                  context.read<UserEntityBloc>().add(
+                    UserEntityFetchUsersEvent(token: auth.token),
+                  );
                 },
               )
             else
@@ -105,6 +170,10 @@ class _UsersViewState extends State<UsersView> {
                   UserEntitySearchFiltersChanged(page: UpdateTo(p)),
                 );
                 // trigger search
+                var auth = context.read<AuthBloc>().state as AuthenticatedState;
+                context.read<UserEntityBloc>().add(
+                  UserEntityFetchUsersEvent(token: auth.token),
+                );
               },
             ),
           )
@@ -121,7 +190,7 @@ class _UsersViewState extends State<UsersView> {
     }
     if (state.event is UserEntitySuccessEvent) {
       if (state.users.isEmpty) {
-        return Text(context.translate(key: 'empty_result'), style: context.h3,);
+        return Text(context.translate(key: 'empty_result'), style: context.h3);
       }
       return EntityTable<UserEntity>(
         entities: state.users,

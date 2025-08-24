@@ -94,3 +94,23 @@ final class AdminSuccessEvent extends AdminEvent {
 final class AdminErrorEvent extends AdminEvent {
   const AdminErrorEvent({required super.message});
 }
+
+final class AdminGlobalSearchEvent extends AdminEvent {
+  final String token, query;
+  const AdminGlobalSearchEvent({required this.token, required this.query});
+}
+
+final class AdminGlobalSearchSuccess extends AdminEvent {
+  final List<UserEntity> users;
+  final List<DeviceEntity> devices;
+  const AdminGlobalSearchSuccess({required this.users, required this.devices});
+}
+
+final class AdminGlobalSearchFailed extends AdminEvent {
+  final String title, reason;
+  const AdminGlobalSearchFailed({
+    this.title = 'global_search_failed_title',
+    super.message = 'global_search_failed_message',
+    required this.reason,
+  });
+}

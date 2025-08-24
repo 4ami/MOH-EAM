@@ -13,10 +13,6 @@ class ResponsiveBuilder extends StatelessWidget {
         final Size size = Size(constraints.maxWidth, constraints.maxHeight);
         final ResponsiveInfo info = ResponsiveInfo.fromSize(size);
 
-        if (kDebugMode) {
-          Logger.i(info.toString(), tag: 'Responsive[Builder]');
-        }
-
         return builder(context, info);
       },
     );

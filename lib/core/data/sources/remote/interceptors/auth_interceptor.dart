@@ -30,7 +30,12 @@ final class AuthInterceptor extends Interceptor {
       ),
     );
 
-    final res = await dio.get(MohAppConfig.api.authToken);
+    final res = await dio.get(
+      MohAppConfig.api.authToken.replaceAll(
+        '\$version',
+        MohAppConfig.api.version,
+      ),
+    );
     if (res.statusCode != 200) return null;
 
     final String? newToken = res.data['token'];
@@ -71,17 +76,17 @@ final class AuthInterceptor extends Interceptor {
     Logger.e('Request Failed', error: err, tag: 'AuthInterceptor');
     if (err.response?.statusCode == 401) {
       final String? newToken = await _refresh();
-      if (newToken == null) handler.next(err);
+      if (newToken == null) return handler.next(err);
       err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
       try {
         final Response response = await _retry(err.requestOptions);
-        handler.resolve(response);
+        return handler.resolve(response);
       } catch (e) {
-        handler.next(err);
+        return handler.next(err);
       }
     }
     err.logDebug(tag: 'AuthInterceptor[onError]');
-    handler.next(err);
+    return handler.next(err);
   }
 
   void _onTokenRefreshed(String newToken) {

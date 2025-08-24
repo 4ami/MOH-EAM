@@ -21,4 +21,8 @@ final class DashboardService {
   }) async {
     return await repository.fetchDepts(token: token, locale: locale);
   }
+
+  Future<FetchUserStatistics> fetchUserStats(String token) async {
+    return await repository.fetchUserStats(token: token);
+  }
 }

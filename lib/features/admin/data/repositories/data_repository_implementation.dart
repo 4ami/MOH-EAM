@@ -44,4 +44,16 @@ final class DataRepositoryImplementation implements DataRepository {
       parser: (json) => FetchDepartmentsRootModel.fromJSON(json),
     );
   }
+
+  @override
+  Future<FetchUserStatistics> fetchUserStats({required String token}) async {
+    return await _client.get(
+      token: token,
+      endpoint: MohAppConfig.api.userStatistics.replaceAll(
+        '\$version',
+        version,
+      ),
+      parser: (json) => FetchUserStatistics.fromJSON(json),
+    );
+  }
 }

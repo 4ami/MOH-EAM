@@ -50,6 +50,11 @@ class _SigninPageState extends State<SigninPage> {
 
   void _listener(BuildContext context, AuthState state) {
     if (state.event is AuthenticationSuccess) {
+      var a = state as AuthenticatedState;
+      if (a.user.role == 'guest') {
+        context.go(AppRoutesInformation.guestPage.path);
+        return;
+      }
       context.go(AppRoutesInformation.admin.path);
       return;
     }

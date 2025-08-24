@@ -1,7 +1,8 @@
 part of '../admin_widgets_module.dart';
 
 class AdminSearchBar extends StatelessWidget {
-  const AdminSearchBar({super.key});
+  const AdminSearchBar({super.key, this.controller});
+  final TextEditingController? controller;
 
   Widget _innerContainer(BuildContext context) => BackdropFilter(
     filter: ImageFilter.blur(),
@@ -13,9 +14,18 @@ class AdminSearchBar extends StatelessWidget {
   );
 
   Widget _field(BuildContext context) {
+    var t = context.translate;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return t(key: 'field_required');
+          }
+          return null;
+        },
+        controller: controller,
         decoration: InputDecoration(
           border: InputBorder.none,
           labelText: context.translate(key: 'search_bar_label'),
@@ -29,7 +39,7 @@ class AdminSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      width: context.responsive.scale(350, .8),
+      width: context.responsive.scale(250, .8),
       decoration: _decoration(context),
       child: _innerContainer(context),
     );

@@ -1,0 +1,570 @@
+library;
+
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moh_eam/config/logging/logger.dart';
+import 'package:moh_eam/config/routing/_helpers/_routing_helpers_module.dart';
+import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
+import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
+import 'package:moh_eam/config/widget/pagination_filter.dart';
+import 'package:moh_eam/config/widget/widget_module.dart';
+import 'package:moh_eam/core/bloc/global_bloc_module.dart';
+import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
+import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
+import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
+import 'package:moh_eam/features/entity/feature/departments/domain/entity/department.dart';
+import 'package:moh_eam/features/entity/feature/departments/ui/view/create_department.dart';
+import 'package:moh_eam/features/entity/feature/departments/ui/view/update_department.dart';
+
+class DepartmentView extends StatefulWidget {
+  const DepartmentView({super.key});
+
+  @override
+  State<DepartmentView> createState() => _DepartmentViewState();
+}
+
+class _DepartmentViewState extends State<DepartmentView> {
+  String? query;
+  int page = 1;
+  @override
+  Widget build(BuildContext context) {
+    bool canCreate = AuthorizationHelper.hasMinimumPermission(
+      context,
+      'departments',
+      'CREATE',
+    );
+    return ResponsiveScaffold(
+      appBar: _appBar(context.isMobile),
+      body: BlocListener<DepartmentBloc, DepartmentState>(
+        listener: _departmentListener,
+        child: _layout(),
+      ),
+      floatingActionButton: canCreate ? _addDepartment(context) : null,
+    );
+  }
+
+  void _departmentListener(BuildContext context, DepartmentState state) {
+    if (state.event is DepartmentSuccessEventSealed) {
+      var t = context.translate;
+      var success = state.event as DepartmentSuccessEventSealed;
+
+      String title = t(key: success.title);
+      String description = t(key: success.message);
+      context.successToast(title: title, description: description);
+      return;
+    }
+
+    if (state.event is DepartmentFailedEvent) {
+      var t = context.translate;
+      var failed = state.event as DepartmentFailedEvent;
+
+      String title = t(key: failed.title);
+      String description = t(
+        key: failed.message,
+      ).replaceAll('\$reason', t(key: failed.reason));
+
+      context.errorToast(title: title, description: description);
+      return;
+    }
+
+    if (state.event is DeleteDepartmentSuccess) {
+      context.successToast(
+        title: context.translate(
+          key: 'delete_department_success_notification_title',
+        ),
+        description: context.translate(
+          key: 'delete_department_success_notification_desc',
+        ),
+      );
+      return;
+    }
+  }
+
+  FloatingActionButton _addDepartment(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: _onAddDepartment,
+      icon: Icon(Icons.add),
+      label: Text(context.translate(key: 'add_new_department')),
+    );
+  }
+
+  Widget _buildUtil({bool vertical = false}) {
+    if (vertical) {
+      return Column(
+        spacing: 10,
+        children: [
+          SearchField(
+            hintKey: 'search_departments',
+            callback: _onSearchQueryChanged,
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _onSearch,
+              child: Text(context.translate(key: 'search')),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Switch to vertical layout on small screens
+        if (constraints.maxWidth < 600) {
+          return _buildUtil(vertical: true);
+        }
+
+        return SizedBox(
+          width: math.min(
+            constraints.maxWidth * 0.95,
+            context.responsive.width(.75),
+          ),
+          child: Row(
+            children: [
+              // Flexible search field that takes available space
+              Expanded(
+                flex: 3,
+                child: SearchField(
+                  hintKey: 'search_departments',
+                  callback: _onSearchQueryChanged,
+                ),
+              ),
+              SizedBox(width: 10),
+              // Search button with constrained width
+              ConstrainedBox(
+                constraints: BoxConstraints(minWidth: 80, maxWidth: 120),
+                child: ElevatedButton(
+                  onPressed: _onSearch,
+                  child: Text(
+                    context.translate(key: 'search'),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDepartmentCard(DepartmentEntity department) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: InkWell(
+        onTap: () => _onDepartmentTap(department),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          department.name,
+                          style: context.h6?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          department.levelName,
+                          style: context.bodyMedium?.copyWith(
+                            color: context.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _buildActionButtons(department),
+                ],
+              ),
+              SizedBox(height: 12),
+              Text(
+                '${context.translate(key: 'level')}: ${department.level} • ID: ${department.id}',
+                style: context.bodySmall?.copyWith(
+                  color: context.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(DepartmentEntity department) {
+    bool enabled =
+        context.watch<DepartmentBloc>().state.event is! DepartmentLoadingEvent;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (AuthorizationHelper.hasMinimumPermission(
+          context,
+          'departments',
+          'UPDATE',
+        ))
+          IconButton(
+            onPressed: enabled ? () => _onEditDepartment(department) : null,
+            icon: Icon(Icons.edit),
+            tooltip: context.translate(key: 'edit_action'),
+            style: IconButton.styleFrom(
+              backgroundColor: context.primaryContainer,
+              foregroundColor: context.onPrimaryContainer,
+            ),
+          ),
+        SizedBox(width: 8),
+        if (AuthorizationHelper.hasMinimumPermission(
+          context,
+          'departments',
+          'DELETE',
+        ))
+          IconButton(
+            onPressed: enabled ? () => _onDeleteDepartment(department) : null,
+            icon: Icon(Icons.delete),
+            tooltip: context.translate(key: 'delete_action'),
+            style: IconButton.styleFrom(
+              backgroundColor: context.errorContainer,
+              foregroundColor: context.onErrorContainer,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildDepartmentsList() {
+    var state = context.watch<DepartmentBloc>().state;
+
+    if (state.event is DepartmentFailedEvent) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: context.error),
+            SizedBox(height: 16),
+            Text(context.translate(key: 'failed_to_load'), style: context.h6),
+          ],
+        ),
+      );
+    }
+
+    if (state.event is DepartmentLoadingEvent) {
+      return _shimmer();
+    }
+
+    if (state.event is DepartmentSuccessEvent) {
+      // Filter only root departments (level 0 or no parent)
+      final rootDepartments = state.departments
+          .where((dept) => dept.parentId == null || dept.level == 0)
+          .toList();
+
+      if (state.departments.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.folder_open,
+                size: 64,
+                color: context.onSurfaceVariant,
+              ),
+              SizedBox(height: 16),
+              Text(
+                context.translate(key: 'no_departments_found'),
+                style: context.h6,
+              ),
+              SizedBox(height: 8),
+              Text(
+                context.translate(key: 'add_first_department'),
+                style: context.bodyMedium?.copyWith(
+                  color: context.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+
+      return ListView.builder(
+        padding: EdgeInsets.all(16),
+        itemCount: rootDepartments.length,
+        itemBuilder: (context, index) {
+          return _buildDepartmentCard(rootDepartments[index]);
+        },
+      );
+    }
+
+    return SizedBox.shrink();
+  }
+
+  Widget _buildResults() {
+    var state = context.read<DepartmentBloc>().state;
+    var depts = state.departments;
+    depts.sort((p, n) => p.level.compareTo(n.level));
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      itemCount: depts.length,
+      itemBuilder: (context, index) {
+        return _buildDepartmentCard(depts[index]);
+      },
+    );
+  }
+
+  Widget _shimmer() {
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      itemCount: 6,
+      itemBuilder: (context, index) {
+        return Card(
+          margin: EdgeInsets.only(bottom: 16),
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: context.onSurface.withValues(alpha: .1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Container(
+                        width: 150,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: context.onSurface.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Container(
+                        width: 100,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: context.onSurface.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: context.onSurface.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: context.onSurface.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _content() {
+    var w = context.watch<DepartmentBloc>();
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            context.translate(key: 'department_view_title'),
+            style: context.h5,
+          ),
+        ),
+        _buildUtil(),
+        if (w.state.event is SearchInDepartmentSuccess)
+          Expanded(child: _buildResults())
+        else
+          Expanded(child: _buildDepartmentsList()),
+        if (w.state.event is DepartmentLoadingEvent)
+          PaginationFilter.render()
+        else if (w.state.event is SearchInDepartmentSuccess)
+          PaginationFilter(
+            maxPages: w.state.maxPage,
+            currentPage: page,
+            onPageSelect: (p) {
+              setState(() {
+                page = p;
+              });
+
+              _onSearch();
+            },
+          )
+        else
+          SizedBox.shrink(),
+      ],
+    );
+  }
+
+  Widget _layout() {
+    if (context.isDesktop || context.isLarge) {
+      return Row(
+        children: [
+          SideBar(),
+          Expanded(child: _content()),
+        ],
+      );
+    }
+    return _content();
+  }
+
+  AppBar _appBar(bool isMobile) {
+    return AppBar(
+      title: Text(context.translate(key: 'departments')),
+      actionsPadding: EdgeInsets.symmetric(
+        horizontal: context.responsive.padding,
+        vertical: 10,
+      ),
+      actions: [
+        if (!isMobile) ...[LanguageDropdown(), ThemeSwitcher()],
+        Image.asset(
+          AssetsHelper.mohLogoTextFree,
+          scale: context.responsive.scale(15, .8),
+        ),
+      ],
+    );
+  }
+
+  void _onDepartmentTap(DepartmentEntity department) {
+    context.pushNamed(
+      AppRoutesInformation.viewDepartment.name,
+      pathParameters: {"department": department.id},
+    );
+  }
+
+  void _onEditDepartment(DepartmentEntity department) {
+    // Handle edit department
+    Logger.d('Edit department: ${department.id}', tag: 'DepartmentView');
+    // You can navigate to edit page or show edit dialog
+    // context.pushNamed('edit_department', pathParameters: {"departmentId": department.id});
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return BlocProvider<DepartmentBloc>(
+          create: (_) => DepartmentBloc(),
+          child: UpdateDepartmentWidget(department: department),
+        );
+      },
+    );
+  }
+
+  void _onDeleteDepartment(DepartmentEntity department) {
+    String key = department.level == 0
+        ? 'delete_root_confirmation_message'
+        : 'delete_root_confirmation_message';
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(context.translate(key: 'delete_confirmation_title')),
+          content: Text(context.translate(key: key)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.translate(key: 'cancel_action')),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _performDelete(department);
+              },
+              style: TextButton.styleFrom(foregroundColor: context.error),
+              child: Text(context.translate(key: 'delete_action')),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _performDelete(DepartmentEntity department) {
+    // Handle actual deletion
+    Logger.d('Delete department: ${department.id}', tag: 'DepartmentView');
+    // Add your deletion logic here
+    var auth = context.read<AuthBloc>().state as AuthenticatedState;
+    context.read<DepartmentBloc>().add(
+      DeleteDepartmentEvent(token: auth.token, departmentId: department.id),
+    );
+  }
+
+  void _onAddDepartment() {
+    Logger.d('Add new department', tag: 'DepartmentView');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => BlocProvider<DepartmentBloc>(
+        create: (context) => DepartmentBloc(),
+        child: CreateDepartmentWidget(),
+      ),
+    );
+  }
+
+  void _onSearchQueryChanged(String? query) {
+    // Handle search query change
+    Logger.d('Search query: $query', tag: 'DepartmentView');
+    // You can filter the departments or trigger a search in your bloc
+    // context.read<DepartmentBloc>().add(SearchDepartmentsEvent(query));
+    setState(() {
+      this.query = query;
+    });
+  }
+
+  void _onSearch() {
+    if (query == null || query!.isEmpty) {
+      var auth = context.read<AuthBloc>().state as AuthenticatedState;
+      var lang = context.read<LanguageCubit>().state.languageCode;
+      var event = DepartmentFetchRootsEvent(token: auth.token, lang: lang);
+      context.read<DepartmentBloc>().add(event);
+      return;
+    }
+
+    var lang = context.read<LanguageCubit>().state.languageCode;
+    var a = context.read<AuthBloc>().state as AuthenticatedState;
+    var d = context.read<DepartmentBloc>();
+    var event = SearchForDepartmentEvent(
+      token: a.token,
+      query: query!,
+      lang: lang,
+      page: page,
+    );
+
+    d.add(event);
+  }
+}

@@ -2,17 +2,16 @@ library;
 
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:moh_eam/config/logging/logger.dart';
 import 'package:moh_eam/config/routing/routing_module.dart';
 import 'package:moh_eam/config/utility/extensions/extensions_module.dart';
 import 'package:moh_eam/config/utility/helpers/utility_helpers.dart';
 import 'package:moh_eam/core/bloc/global_bloc_module.dart';
 import 'package:moh_eam/core/domain/entity/entity_model.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
+import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dart';
 
 part 'responsive/responsive_grid.dart';
 part 'responsive/responsive_builder.dart';

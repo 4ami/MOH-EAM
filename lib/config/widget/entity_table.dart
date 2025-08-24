@@ -3,6 +3,7 @@ part of 'widget_module.dart';
 class EntityTable<T extends EntityModel> extends StatefulWidget {
   final List<T> entities;
   final List<String> tableCols;
+  final bool showMore;
   final void Function(T entity)? onUpdate;
   final void Function(T entity)? onDelete;
   final void Function(T entity)? onView;
@@ -14,6 +15,7 @@ class EntityTable<T extends EntityModel> extends StatefulWidget {
     this.onUpdate,
     this.onDelete,
     this.onView,
+    this.showMore = true,
   });
 
   @override
@@ -83,13 +85,18 @@ class _EntityTableState<T extends EntityModel> extends State<EntityTable<T>> {
   }
 
   List<DataColumn> _buildCols() {
-    return List.generate(_columns.length, (i) {
+    var cols = List.generate(_columns.length, (i) {
       return DataColumn(
         label: SelectableText(context.translate(key: _columns[i])),
       );
-    })..add(
-      DataColumn(label: SelectableText(context.translate(key: 'show_more'))),
-    );
+    });
+    return widget.showMore
+        ? (cols..add(
+            DataColumn(
+              label: SelectableText(context.translate(key: 'show_more')),
+            ),
+          ))
+        : cols;
   }
 
   List<DataRow> _buildRow() {
@@ -110,13 +117,30 @@ class _EntityTableState<T extends EntityModel> extends State<EntityTable<T>> {
   }
 
   List<DataCell> _buildCells(Map<String, dynamic> row, int index) {
-    return List.generate(_columns.length, (j) {
+    var cells = List.generate(_columns.length, (j) {
       var cell = row[_columns[j]];
       if (cell == null) {
         return DataCell(SelectableText('N/A'));
       }
+
+      if (cell is String && cell.isEmpty) {
+        return DataCell(SelectableText('-'));
+      }
+      if (cell is bool && _columns[j].startsWith('is')) {
+        bool value = cell;
+        String state = context.translate(key: '${value}_state');
+        return DataCell(
+          SelectableText(
+            state,
+            style: context.bodyLarge!.copyWith(
+              color: value ? Colors.greenAccent : context.error,
+            ),
+          ),
+        );
+      }
       return DataCell(SelectableText(cell.toString()));
-    })..add(_showMore(row, index));
+    });
+    return widget.showMore ? (cells..add(_showMore(row, index))) : cells;
   }
 
   DataCell _showMore(Map<String, dynamic> entity, int index) {
