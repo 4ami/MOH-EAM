@@ -89,6 +89,8 @@ abstract class APIConfig {
 
   String get globalSearch;
 
+  String get profile;
+
   /// Load and prepare any necessary configuration resources.
   ///
   /// In environments like development, this may involve
@@ -254,6 +256,9 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
 
   @override
   String get globalSearch => get(key: 'GLOBAL_SEARCH');
+
+  @override
+  String get profile => get(key: 'PROFILE');
 }
 
 /// Production environment implementation of [APIConfig].
@@ -348,6 +353,9 @@ final class _$Production implements APIConfig {
 
   @override
   String get globalSearch => String.fromEnvironment('GLOBAL_SEARCH');
+
+  @override
+  String get profile => String.fromEnvironment('PROFILE');
 }
 
 /// Utility to determine the active [Environment] at runtime.

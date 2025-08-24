@@ -317,5 +317,15 @@
     "department_failed_message_search": "تعذّر إتمام عملية البحث عن الإدارة بسبب: $reason",
 
     "search_departments": "ابحث عن إدارة...",
-    "update_department_btn": "تحديث الإدارة"
+    "update_department_btn": "تحديث الإدارة",
+
+    "profile_success_title_general": "تمت العملية بنجاح",
+    "profile_success_message_general": "تم تنفيذ المطلوب بخصوص الملف الشخصي بنجاح.",
+    "profile_success_title_fetch": "تم جلب البيانات بنجاح",
+    "profile_success_message_fetch": "تم استرجاع بيانات الملف الشخصي بنجاح.",
+
+    "profile_failed_title_general": "العملية لم تتم",
+    "profile_failed_message_general": "تعذّر تنفيذ المطلوب بخصوص الملف الشخصي بسبب: $reason",
+    "profile_failed_title_fetch": "العملية لم تتم",
+    "profile_failed_message_fetch": "تعذّر جلب بيانات الملف الشخصي بسبب: $reason"
 }

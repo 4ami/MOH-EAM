@@ -99,7 +99,7 @@ final class _Admin implements _RouteInterface {
     );
 
     if (authState.user.role == 'guest') {
-      return AppRoutesInformation.signin.path;
+      return AppRoutesInformation.guestPage.path;
     }
 
     if (userCREATE ||

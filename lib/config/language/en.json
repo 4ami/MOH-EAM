@@ -309,5 +309,15 @@
     "department_failed_message_delete": "The department could not be deleted due to: $reason",
 
     "search_departments": "Search for a department...",
-    "update_department_btn": "Update Department"
+    "update_department_btn": "Update Department",
+
+    "profile_success_title_general": "Operation Completed Successfully",
+    "profile_success_message_general": "The requested action related to the profile was completed successfully.",
+    "profile_success_title_fetch": "Profile Data Retrieved",
+    "profile_success_message_fetch": "The profile information was successfully fetched.",
+    
+    "profile_failed_title_general": "Operation Failed",
+    "profile_failed_message_general": "The requested action related to the profile could not be completed due to: $reason",
+    "profile_failed_title_fetch": "Operation Failed",
+    "profile_failed_message_fetch": "Failed to fetch profile information due to: $reason"
 }

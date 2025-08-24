@@ -75,4 +75,9 @@ final class AppRoutesInformation {
     name: 'search_results',
     path: 'search/results',
   );
+
+  static final RouteDataClass guestPage = RouteDataClass(
+    name: 'guest',
+    path: '/guest/profile',
+  );
 }

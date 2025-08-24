@@ -117,7 +117,15 @@ class _SplashState extends State<Splash> {
         _setMessageWithProgress('splash_success', .5);
       }
       await Future.delayed(const Duration(seconds: 1));
-      _safeNavigation(AppRoutesInformation.admin.path);
+      if (state.event is AuthenticationSuccess) {
+        var a = state as AuthenticatedState;
+        if (a.user.role == 'guest') {
+          _safeNavigation(AppRoutesInformation.guestPage.path);
+          return;
+        }
+        _safeNavigation(AppRoutesInformation.admin.path);
+        return;
+      }
       return;
     }
 
