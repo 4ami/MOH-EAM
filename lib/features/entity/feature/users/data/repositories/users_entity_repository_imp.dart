@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:moh_eam/core/data/sources/remote/moh_api.dart';
 import 'package:moh_eam/core/data/sources/remote/moh_dio_client.dart';
 import 'package:moh_eam/features/entity/feature/users/data/model/create_user.dart';
@@ -92,6 +93,23 @@ final class UsersEntityRepositoryImp implements UsersEntityRepository {
           .replaceAll('\$version', version)
           .replaceAll('\$user', user),
       parser: (json) => DeleteUserResponse.fromJSON(json),
+    );
+  }
+
+  @override
+  Future<void> export({
+    required String token,
+    void Function(int recieved, int total)? onProgress,
+    void Function()? onError,
+    void Function()? onSuccess,
+  }) async {
+    await _client.download(
+      endpoint: MohAppConfig.api.exportUsers.replaceAll('\$version', version),
+      token: token,
+      onProgress: onProgress,
+      options: Options(responseType: ResponseType.bytes),
+      onError: onError,
+      onSuccess: onSuccess
     );
   }
 }

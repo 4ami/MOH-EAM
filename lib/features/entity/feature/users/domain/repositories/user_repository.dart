@@ -35,4 +35,11 @@ abstract interface class UsersEntityRepository {
     required String token,
     required String user,
   });
+
+  Future<void> export({
+    required String token,
+    void Function(int recieved, int total)? onProgress,
+    void Function()? onError,
+    void Function()? onSuccess,
+  });
 }

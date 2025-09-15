@@ -1,11 +1,11 @@
 {
-    "name": "moh_eam",
-    "short_name": "moh_eam",
+    "name": "MOH Enerprise Assets Managment System",
+    "short_name": "MOH-EAM",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "description": "Entrprise Assets Managment System to manage MOH Devices Internally",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -10,9 +10,12 @@ import 'package:moh_eam/config/widget/widget_module.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/entity/feature/devices/bloc/bloc.dart';
+import 'package:moh_eam/features/entity/feature/devices/data/repositories/device_repo_imp.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/entity/filters.dart';
+import 'package:moh_eam/features/entity/feature/devices/domain/services/export_devices.dart';
 import 'package:moh_eam/features/entity/feature/devices/ui/view/create_device.dart';
+import 'package:moh_eam/features/entity/feature/devices/ui/view/update_device.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 
 class DeviceView extends StatefulWidget {
@@ -63,6 +66,8 @@ class _DeviceViewState extends State<DeviceView> {
       var message = t(key: success.message);
       context.successToast(title: title, description: message);
       if (success is CreateSuccessEvent) context.pop();
+      if (success is DeleteSuccessEvent) context.pop();
+      if (success is PatchSuccessEvent) context.pop();
       var a = context.read<AuthBloc>().state as AuthenticatedState;
       context.read<DeviceBloc>().add(FetchDevicesEvent(token: a.token));
       return;
@@ -105,13 +110,43 @@ class _DeviceViewState extends State<DeviceView> {
       if (state.devices.isEmpty) {
         return Text(context.translate(key: 'empty_result'), style: context.h3);
       }
+      bool edit = AuthorizationHelper.hasMinimumPermission(
+        context,
+        'devices',
+        'UPDATE',
+      );
+      bool delete = AuthorizationHelper.hasMinimumPermission(
+        context,
+        'devices',
+        'DELETE',
+      );
       return EntityTable<DeviceEntity>(
         entities: state.devices,
         tableCols: DeviceEntity.tableCols,
         showMore: false,
-        onView: (entity) {
-          entity.id.logDebug(tag: 'onView');
+        edit: edit,
+        delete: delete,
+        onUpdate: (entity) {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(value: context.read<DeviceBloc>()),
+                  BlocProvider<UserEntityBloc>(
+                    create: (_) {
+                      return UserEntityBloc();
+                    },
+                  ),
+                ],
+                child: UpdateDeviceWidget(device: entity),
+              );
+            },
+          );
         },
+        onDelete: (entity) => _onDelete(entity.id),
       );
     }
     return EntityTable.render();
@@ -188,6 +223,33 @@ class _DeviceViewState extends State<DeviceView> {
     return _content();
   }
 
+  void _onExportSuccess() {
+    var t = context.translate;
+    context.successToast(
+      title: t(key: 'export_success_title'),
+      description: t(key: 'export_success_description'),
+    );
+  }
+
+  void _onExportFailed() {
+    var t = context.translate;
+    context.errorToast(
+      title: t(key: 'export_failed_title'),
+      description: 'export_failed_description',
+    );
+  }
+
+  void _export() async {
+    var service = ExportDevicesService(DeviceRepoImp());
+    var a = context.read<AuthBloc>().state as AuthenticatedState;
+    var token = a.token;
+    await service.call(
+      token: token,
+      onError: _onExportFailed,
+      onSuccess: _onExportSuccess,
+    );
+  }
+
   Widget _content() {
     var state = context.watch<DeviceBloc>().state;
     var devices = state.devices;
@@ -195,6 +257,12 @@ class _DeviceViewState extends State<DeviceView> {
       return Column(
         spacing: 15,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ExportButton(labelKey: 'export_devices', onPressed: _export),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: _buildUtil(),
@@ -230,6 +298,9 @@ class _DeviceViewState extends State<DeviceView> {
 
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(
+          child: ExportButton(labelKey: 'export_devices', onPressed: _export),
+        ),
         SliverToBoxAdapter(child: _buildUtil(vertical: true)),
         SliverList.builder(
           itemCount: devices.length,
@@ -302,6 +373,35 @@ class _DeviceViewState extends State<DeviceView> {
     bloc.add(
       UpdateDeviceFilters(
         filters: bloc.state.filters.copyWith(query: UpdateDeviceFilterTo(q)),
+      ),
+    );
+  }
+
+  void _onDelete(String id) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(context.translate(key: 'delete_confirmation_title')),
+        content: Text(context.translate(key: 'delete_confirmation_message')),
+        actions: [
+          TextButton(
+            onPressed: () => context.pop(ctx),
+            child: Text(context.translate(key: 'cancel_action')),
+          ),
+          TextButton(
+            onPressed: () {
+              //Delete then pop
+              var a = context.read<AuthBloc>().state as AuthenticatedState;
+              var d = context.read<DeviceBloc>();
+
+              d.add(DeleteDeviceEvent(token: a.token, id: id));
+            },
+            child: Text(
+              context.translate(key: 'delete_action'),
+              style: context.bodyLarge!.copyWith(color: context.error),
+            ),
+          ),
+        ],
       ),
     );
   }

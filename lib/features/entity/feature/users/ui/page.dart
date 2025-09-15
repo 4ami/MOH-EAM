@@ -15,7 +15,9 @@ import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
+import 'package:moh_eam/features/entity/feature/users/data/repositories/users_entity_repository_imp.dart';
 import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
+import 'package:moh_eam/features/entity/feature/users/domain/services/export_users.dart';
 import 'package:moh_eam/features/entity/feature/users/ui/view/create_user.dart';
 
 export 'widgets/users_widgets_module.dart';
@@ -107,6 +109,12 @@ class _UsersViewState extends State<UsersView> {
       return Column(
         spacing: 15,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ExportButton(labelKey: 'export_users', onPressed: _export),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: _buildUtil(),
@@ -140,6 +148,9 @@ class _UsersViewState extends State<UsersView> {
 
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(
+          child: ExportButton(labelKey: 'export_users', onPressed: _export),
+        ),
         SliverToBoxAdapter(child: _buildUtil(vertical: true)),
         SliverList.builder(
           itemCount: users.length,
@@ -180,6 +191,33 @@ class _UsersViewState extends State<UsersView> {
         else
           SliverToBoxAdapter(child: SizedBox.shrink()),
       ],
+    );
+  }
+
+  void _onExportSuccess() {
+    var t = context.translate;
+    context.successToast(
+      title: t(key: 'export_success_title'),
+      description: t(key: 'export_success_description'),
+    );
+  }
+
+  void _onExportFailed() {
+    var t = context.translate;
+    context.errorToast(
+      title: t(key: 'export_failed_title'),
+      description: 'export_failed_description',
+    );
+  }
+
+  void _export() async {
+    var service = ExportUsersService(UsersEntityRepositoryImp());
+    var a = context.read<AuthBloc>().state as AuthenticatedState;
+    var token = a.token;
+    await service.call(
+      token: token,
+      onError: _onExportFailed,
+      onSuccess: _onExportSuccess,
     );
   }
 

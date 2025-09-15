@@ -15,7 +15,9 @@ import 'package:moh_eam/core/bloc/global_bloc_module.dart';
 import 'package:moh_eam/features/admin/ui/widgets/admin_widgets_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/entity/feature/departments/bloc/bloc.dart';
+import 'package:moh_eam/features/entity/feature/departments/data/repositories/department_repository_implementation.dart';
 import 'package:moh_eam/features/entity/feature/departments/domain/entity/department.dart';
+import 'package:moh_eam/features/entity/feature/departments/domain/service/export_departments.dart';
 import 'package:moh_eam/features/entity/feature/departments/ui/view/create_department.dart';
 import 'package:moh_eam/features/entity/feature/departments/ui/view/update_department.dart';
 
@@ -392,10 +394,43 @@ class _DepartmentViewState extends State<DepartmentView> {
     );
   }
 
+  void _onExportSuccess() {
+    var t = context.translate;
+    context.successToast(
+      title: t(key: 'export_success_title'),
+      description: t(key: 'export_success_description'),
+    );
+  }
+
+  void _onExportFailed() {
+    var t = context.translate;
+    context.errorToast(
+      title: t(key: 'export_failed_title'),
+      description: 'export_failed_description',
+    );
+  }
+
+  void _export() async {
+    var service = ExportDepartmentsService(DepartmentRepoImplementation());
+    var a = context.read<AuthBloc>().state as AuthenticatedState;
+    var token = a.token;
+    await service.call(
+      token: token,
+      onError: _onExportFailed,
+      onSuccess: _onExportSuccess,
+    );
+  }
+
   Widget _content() {
     var w = context.watch<DepartmentBloc>();
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ExportButton(labelKey: 'export_departments', onPressed: _export),
+          ],
+        ),
         Padding(
           padding: EdgeInsets.all(16),
           child: Text(

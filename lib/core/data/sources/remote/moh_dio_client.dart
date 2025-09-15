@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:moh_eam/config/logging/logger.dart';
+import 'package:moh_eam/config/utility/helpers/export_helper.dart';
 import 'package:moh_eam/core/data/model/api_error.dart';
 import 'package:moh_eam/core/data/model/base_request.dart';
 import 'package:moh_eam/core/data/model/base_response.dart';
@@ -209,21 +210,34 @@ class MOHDioClient {
 
   Future<void> download({
     required String endpoint,
-    required String savePath,
     Map<String, dynamic>? queryParams,
     Map<String, dynamic>? pathParams,
     ProgressCallback? onProgress,
+    void Function()? onError,
+    void Function()? onSuccess,
     Options? options,
+    String? token,
   }) async {
     try {
-      await _mohDio.download(
+      final res = await _mohDio.get(
         _processPathParams(endpoint, pathParams),
-        savePath,
         queryParameters: queryParams,
         onReceiveProgress: onProgress,
-        options: options,
-        deleteOnError: true,
+        options: _addAuthHeader(options, token),
       );
+
+      if (res.statusCode != 200) {
+        if (onError != null) onError();
+        return;
+      }
+      String? fileName;
+      final disp = res.headers.value('content-disposition');
+      if (disp != null && disp.contains('filename=')) {
+        fileName = disp.split('filename=')[1].replaceAll('"', '');
+      }
+
+      await export(res.data, fileName: fileName);
+      if (onSuccess != null) onSuccess();
     } on DioException catch (e) {
       Logger.e('Request Failed', tag: 'Client[DOWNLOAD]', error: e);
       throw _handleDioError(e);

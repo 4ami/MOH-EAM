@@ -53,4 +53,11 @@ abstract interface class DepartmentRepo {
     required int page,
     required int limit,
   });
+
+  Future<void> export({
+    required String token,
+    void Function(int recieved, int total)? onProgress,
+    void Function()? onError,
+    void Function()? onSuccess,
+  });
 }

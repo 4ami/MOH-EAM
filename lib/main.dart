@@ -14,7 +14,7 @@ Future<void> main() async {
   await Future.wait<void>([
     AppRouter.instance.init(),
     MohAppConfig.init(environment: EnvironmentHelper.current),
-    Logger.instance.initLog(config: LoggerPresets.development),
+    Logger.instance.initLog(config: LoggerPresets.production),
   ]);
   runApp(const _MainApp(key: null));
 }

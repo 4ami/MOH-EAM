@@ -246,6 +246,8 @@
     "device_success_message_create": "The new device was created successfully.",
     "device_success_title_delete": "Device Deleted Successfully",
     "device_success_message_delete": "The device was deleted successfully.",
+    "device_success_title_update": "Updated Successfully",
+    "device_success_message_update": "The device details have been updated successfully.",
 
     "device_failed_title_general": "Operation Failed",
     "device_failed_message_general": "The device-related operation failed due to: $reason",
@@ -253,6 +255,8 @@
     "device_failed_message_create": "The device creation failed due to: $reason",
     "device_failed_title_delete": "Failed to Delete Device",
     "device_failed_message_delete": "The device deletion failed due to: $reason",
+    "device_failed_title_update": "Update Failed",
+    "device_failed_message_update": "The device details could not be updated due to: $reason",
 
     "assign_to_user_hint": "Enter username to verify",
     "user_information": "User Information",
@@ -319,5 +323,20 @@
     "profile_failed_title_general": "Operation Failed",
     "profile_failed_message_general": "The requested action related to the profile could not be completed due to: $reason",
     "profile_failed_title_fetch": "Operation Failed",
-    "profile_failed_message_fetch": "Failed to fetch profile information due to: $reason"
+    "profile_failed_message_fetch": "Failed to fetch profile information due to: $reason",
+
+    "export_devices": "Export Devices",
+    "export_departments": "Export Departments",
+    "export_users": "Export Users",
+
+    "export_success_title": "Export Successful",
+    "export_success_description": "The file has been downloaded successfully.",
+    "export_failed_title": "Export Failed",
+    "export_failed_description": "An error occurred while downloading the file. Please try again.",
+
+    "404_invalid_device_request": "The requested device cannot be processed. Please verify and try again.",
+    "404_invalid_username_assignment": "The username assignment could not be completed. Please verify the username and try again.",
+
+    "update_device_title": "Edit Device Details",
+    "update_device_btn": "Edit Device"
 }
