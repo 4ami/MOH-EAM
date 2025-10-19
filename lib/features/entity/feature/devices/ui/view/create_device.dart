@@ -6,6 +6,7 @@ import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/entity/feature/devices/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/devices/data/model/create_device.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dart';
+import 'package:moh_eam/features/entity/feature/devices/ui/widgets/device_widgets_module.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
@@ -23,8 +24,9 @@ class _CreateDeviceWidgetState extends State<CreateDeviceWidget> {
   final _model = TextEditingController();
   final _type = TextEditingController();
   final _hostName = TextEditingController();
+  final _note = TextEditingController();
   UserEntity? _user;
-
+  String movementStateValue = "UNASSIGNED";
   final Map<String, bool> _boolValues = {
     'in_domain': false,
     'kasper_installed': false,
@@ -175,10 +177,25 @@ class _CreateDeviceWidgetState extends State<CreateDeviceWidget> {
       child: _assignBuilder(t, ur, uw),
     );
 
+    final movementState = MovementStateDropDown(
+      onChanged: (state) {
+        setState(() {
+          movementStateValue = state;
+        });
+      },
+    );
+
+    final note = _fieldBuilder(
+      controller: _note,
+      label: t(key: "movement_note"),
+      onChanged: (mn) {},
+      validator: (mn) => ValidationHelper.movementNote(mn, context),
+    );
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Container(
-        padding: EdgeInsets.all(25),
+        padding: EdgeInsets.all(35),
         margin: EdgeInsets.only(
           left: context.responsive.padding,
           right: context.responsive.padding,
@@ -204,6 +221,8 @@ class _CreateDeviceWidgetState extends State<CreateDeviceWidget> {
                 typeField,
                 hostNameField,
                 ...boolSwitch,
+                movementState,
+                note,
                 assignUser,
                 ElevatedButton.icon(
                   onPressed: w.state.event is DeviceLoadingEvent
@@ -324,7 +343,11 @@ class _CreateDeviceWidgetState extends State<CreateDeviceWidget> {
         user: _user,
       );
 
-      CreateDeviceRequest deviceRequest = CreateDeviceRequest(device: device);
+      CreateDeviceRequest deviceRequest = CreateDeviceRequest(
+        device: device,
+        movementState: movementStateValue,
+        note: _note.text.trim(),
+      );
 
       var a = context.read<AuthBloc>().state as AuthenticatedState;
 

@@ -80,4 +80,9 @@ final class AppRoutesInformation {
     name: 'guest',
     path: '/guest/profile',
   );
+
+  static final RouteDataClass logsPage = RouteDataClass(
+    name: 'logs',
+    path: 'movements/logs',
+  );
 }

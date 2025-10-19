@@ -106,6 +106,16 @@ class StaticDrawerData {
         itemLabel: context.translate(key: 'devices_section'),
         child: child,
       ),
+
+      if (AuthorizationHelper.hasMinimumPermission(context, 'logs', 'VIEW'))
+        DrawerItemEntity(
+          clickable: true,
+          callback: () {
+            context.pushNamed(AppRoutesInformation.logsPage.name);
+          },
+          itemLabel: context.translate(key: 'movement_logs'),
+          child: child,
+        ),
     ];
     return DrawerSectionEntity(sectionKey: 'system_sctions', items: items);
   }

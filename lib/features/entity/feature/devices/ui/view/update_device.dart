@@ -6,6 +6,7 @@ import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/entity/feature/devices/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/devices/data/model/patch_device.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dart';
+import 'package:moh_eam/features/entity/feature/devices/ui/widgets/device_widgets_module.dart';
 import 'package:moh_eam/features/entity/feature/users/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/users/domain/entity/user_entity.dart';
 
@@ -24,7 +25,9 @@ class _UpdateDeviceWidgetState extends State<UpdateDeviceWidget> {
   final _type = TextEditingController();
   final _hostName = TextEditingController();
   final _username = TextEditingController();
+  final _note = TextEditingController();
   UserEntity? _user;
+  String movementStateValue = "UNASSIGNED";
 
   final Map<String, bool> _boolValues = {
     'in_domain': false,
@@ -202,6 +205,21 @@ class _UpdateDeviceWidgetState extends State<UpdateDeviceWidget> {
       child: _assignBuilder(t, ur, uw),
     );
 
+    final movementState = MovementStateDropDown(
+      onChanged: (state) {
+        setState(() {
+          movementStateValue = state;
+        });
+      },
+    );
+
+    final note = _fieldBuilder(
+      controller: _note,
+      label: t(key: "movement_note"),
+      onChanged: (mn) {},
+      validator: (mn) => ValidationHelper.movementNote(mn, context),
+    );
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Container(
@@ -231,6 +249,8 @@ class _UpdateDeviceWidgetState extends State<UpdateDeviceWidget> {
                 typeField,
                 hostNameField,
                 ...boolSwitch,
+                movementState,
+                note,
                 assignUser,
                 ElevatedButton.icon(
                   onPressed: w.state.event is DeviceLoadingEvent
@@ -352,7 +372,11 @@ class _UpdateDeviceWidgetState extends State<UpdateDeviceWidget> {
         user: _user,
       );
 
-      PatchDeviceRequest deviceRequest = PatchDeviceRequest(device: device);
+      PatchDeviceRequest deviceRequest = PatchDeviceRequest(
+        device: device,
+        movementState: movementStateValue,
+        note: _note.text.trim(),
+      );
 
       var a = context.read<AuthBloc>().state as AuthenticatedState;
 

@@ -79,6 +79,18 @@ class SideBar extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
+        if (AuthorizationHelper.hasMinimumPermission(context, 'logs', 'VIEW'))
+          SideBarItemContainer(
+            onPressed: () {
+              context.pushNamed(AppRoutesInformation.logsPage.name);
+            },
+            shrinked: Icon(Icons.assignment, color: context.primary),
+            expanded: Text(
+              context.translate(key: 'movement_logs'),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+          ),
         const Spacer(),
         // SideBarItemContainer(
         //   shrinked: Icon(Icons.support_agent_rounded),

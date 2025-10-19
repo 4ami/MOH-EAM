@@ -27,6 +27,8 @@ import 'package:moh_eam/features/auth/auth_module.dart';
 import 'package:moh_eam/features/auth/bloc/auth_bloc.dart';
 import 'package:moh_eam/features/guest/bloc/bloc.dart';
 import 'package:moh_eam/features/guest/ui/page.dart';
+import 'package:moh_eam/features/logs/bloc/bloc.dart';
+import 'package:moh_eam/features/logs/ui/page.dart';
 import 'package:moh_eam/features/roles/bloc/bloc.dart';
 import 'package:moh_eam/features/roles/ui/page.dart';
 import 'package:moh_eam/features/splash/splash_module.dart';
@@ -37,6 +39,7 @@ part '_signin.dart';
 part '_admin.dart';
 part '_entity_viewer.dart';
 part '_guest.dart';
+part '_logs.dart';
 
 final class AppRoutes {
   const AppRoutes._();

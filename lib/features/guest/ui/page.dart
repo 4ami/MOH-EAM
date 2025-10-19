@@ -19,6 +19,7 @@ class _GuestPageState extends State<GuestPage> {
   @override
   Widget build(BuildContext context) {
     var t = context.translate;
+    var w = context.watch<ProfileBloc>().state;
     return ResponsiveScaffold(
       appBar: AppBar(
         actionsPadding: EdgeInsets.symmetric(
@@ -31,30 +32,29 @@ class _GuestPageState extends State<GuestPage> {
             : Text(t(key: 'splash_title')),
         actions: [LanguageDropdown(), ThemeSwitcher()],
       ),
-      body: _content(),
+      body: _content(w),
     );
   }
 
-  Widget _content() {
+  Widget _content(ProfileState sw) {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(child: _greeting()),
         SliverToBoxAdapter(child: SectionDivider(section: 'users_card_title')),
-        ?_buildUserSection(),
+        ?_buildUserSection(sw),
         SliverToBoxAdapter(
           child: SectionDivider(section: 'devices_card_title'),
         ),
-        ?_buildDeviceSection(),
+        ?_buildDeviceSection(sw),
         SliverToBoxAdapter(
           child: SectionDivider(section: 'departments_card_title'),
         ),
-        ?_buildDepartmentSection(),
+        ?_buildDepartmentSection(sw),
       ],
     );
   }
 
-  Widget? _buildDeviceSection() {
-    var w = context.watch<ProfileBloc>().state;
+  Widget? _buildDeviceSection(ProfileState w) {
     if (w.event is ProfileLoadingEvent) {
       return SliverList.builder(
         itemCount: 3,
@@ -76,8 +76,7 @@ class _GuestPageState extends State<GuestPage> {
     return null;
   }
 
-  Widget? _buildDepartmentSection() {
-    var w = context.watch<ProfileBloc>().state;
+  Widget? _buildDepartmentSection(ProfileState w) {
     if (w.profile != null) {
       if (w.profile?.department != null) {
         return SliverToBoxAdapter(
@@ -88,8 +87,7 @@ class _GuestPageState extends State<GuestPage> {
     return null;
   }
 
-  Widget? _buildUserSection() {
-    var w = context.watch<ProfileBloc>().state;
+  Widget? _buildUserSection(ProfileState w) {
     if (w.event is ProfileLoadingEvent) {
       return SliverToBoxAdapter(child: UserCard.render);
     }

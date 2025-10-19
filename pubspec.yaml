@@ -35,7 +35,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/fonts/
-    # - lib/config/.env/
+    - lib/config/.env/
     - lib/config/language/
   
   fonts:

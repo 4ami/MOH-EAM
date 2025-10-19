@@ -4,7 +4,10 @@ import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dar
 
 class PatchDeviceRequest extends BaseRequest {
   final DeviceEntity device;
-  const PatchDeviceRequest({required this.device});
+  final String movementState;
+  final String? note;
+  const PatchDeviceRequest({required this.device, required this.movementState,
+    this.note,});
 
   @override
   Map<String, dynamic> toJson() {
@@ -20,6 +23,8 @@ class PatchDeviceRequest extends BaseRequest {
       if (device.crowdStrikeInstalled != null)
         "crowdstrike_installed": device.crowdStrikeInstalled,
       if (device.user != null) "user": device.user!.id,
+      "device_state": movementState,
+      if (note != null) "action_note": note,
     };
   }
 }

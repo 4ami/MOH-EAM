@@ -96,6 +96,8 @@ abstract class APIConfig {
 
   String get profile;
 
+  String get logs;
+
   /// Load and prepare any necessary configuration resources.
   ///
   /// In environments like development, this may involve
@@ -279,6 +281,9 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
 
   @override
   String get profile => get(key: 'PROFILE');
+
+  @override
+  String get logs => get(key: "LOGS");
 }
 
 /// Production environment implementation of [APIConfig].
@@ -348,6 +353,7 @@ final class _$Production implements APIConfig {
   static const String _exportUsers = String.fromEnvironment('EXPORT_USERS');
   static const String _globalSearch = String.fromEnvironment('GLOBAL_SEARCH');
   static const String _profile = String.fromEnvironment('PROFILE');
+  static const String _logs = String.fromEnvironment('LOGS');
 
   @override
   Future<void> init() async {}
@@ -441,6 +447,9 @@ final class _$Production implements APIConfig {
 
   @override
   String get profile => _profile;
+
+  @override
+  String get logs => _logs;
 }
 
 /// Utility to determine the active [Environment] at runtime.

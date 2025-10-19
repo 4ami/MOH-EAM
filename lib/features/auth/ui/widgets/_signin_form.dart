@@ -48,6 +48,7 @@ class _SigninFormState extends State<_SigninForm> {
                   UsernameChanged(username: p0 ?? ''),
                 );
               },
+              onFieldSubmitted: (_) => _submit(),
             ),
             buildField(
               context.translate(key: 'signin_password_label'),
@@ -59,6 +60,7 @@ class _SigninFormState extends State<_SigninForm> {
                 );
               },
               validator: (p) => ValidationHelper.password(p, context),
+              onFieldSubmitted: (_) => _submit(),
             ),
             if (w.event is AuthenticationFailed)
               Text(
@@ -94,9 +96,11 @@ class _SigninFormState extends State<_SigninForm> {
     TextDirection direction = TextDirection.ltr,
     String? Function(String?)? validator,
     void Function(String?)? onChanged,
+    void Function(String)? onFieldSubmitted,
   }) {
     return TextFormField(
       onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
       validator: validator,
       textDirection: direction,
       autovalidateMode: AutovalidateMode.onUnfocus,

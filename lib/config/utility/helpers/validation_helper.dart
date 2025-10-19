@@ -163,4 +163,13 @@ class ValidationHelper {
 
     return null;
   }
+
+  static String? movementNote(String? value, BuildContext context) {
+    if (value == null || value.isEmpty) return null;
+    var pattern = r'^(?!.*__)(?![_\s])[A-Za-z0-9\u0600-\u06FF _]+(?<![_\s])$';
+    if (!RegExp(pattern).hasMatch(value)) {
+      return context.translate(key: 'note_invalid_fromat');
+    }
+    return null;
+  }
 }
