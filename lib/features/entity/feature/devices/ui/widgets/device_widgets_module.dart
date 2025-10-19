@@ -7,3 +7,4 @@ import 'package:moh_eam/features/entity/feature/devices/bloc/bloc.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/entity/filters.dart';
 
 part 'device_filters.dart';
+part 'movement_state.dart';

@@ -71,3 +71,44 @@ final class CreateFailedEvent extends FailedDeviceEvent {
     required super.reason,
   });
 }
+
+final class PatchDeviceEvent extends DeviceEvents {
+  final String token;
+  final PatchDeviceRequest deviceRequest;
+  const PatchDeviceEvent({required this.token, required this.deviceRequest});
+}
+
+final class DeleteDeviceEvent extends DeviceEvents {
+  final String token, id;
+  const DeleteDeviceEvent({required this.token, required this.id});
+}
+
+final class PatchSuccessEvent extends SuccessDeviceEvent {
+  const PatchSuccessEvent({
+    super.title = "device_success_title_update",
+    super.message = "device_success_message_update",
+  });
+}
+
+final class PatchFailedEvent extends FailedDeviceEvent {
+  const PatchFailedEvent({
+    super.title = "device_failed_title_update",
+    super.message = "device_failed_message_update",
+    required super.reason,
+  });
+}
+
+final class DeleteSuccessEvent extends SuccessDeviceEvent {
+  const DeleteSuccessEvent({
+    super.title = "device_success_title_delete",
+    super.message = "device_success_message_delete",
+  });
+}
+
+final class DeleteFailedEvent extends FailedDeviceEvent {
+  const DeleteFailedEvent({
+    super.title = "device_failed_title_delete",
+    super.message = "device_failed_message_delete",
+    required super.reason,
+  });
+}

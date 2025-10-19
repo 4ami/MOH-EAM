@@ -267,6 +267,7 @@ final class _Admin implements _RouteInterface {
         );
       },
     ),
+    _LogsRoute().page,
     _EntityViewerPage().page,
   ];
 }

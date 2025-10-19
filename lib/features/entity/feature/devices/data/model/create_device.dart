@@ -5,7 +5,13 @@ import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dar
 
 class CreateDeviceRequest extends BaseRequest {
   final DeviceEntity device;
-  const CreateDeviceRequest({required this.device});
+  final String movementState;
+  final String? note;
+  const CreateDeviceRequest({
+    required this.device,
+    required this.movementState,
+    this.note,
+  });
 
   @override
   Map<String, dynamic> toJson() {
@@ -20,6 +26,8 @@ class CreateDeviceRequest extends BaseRequest {
       if (device.crowdStrikeInstalled != null)
         "crowdstrike_installed": device.crowdStrikeInstalled,
       if (device.user != null) "user": device.user!.id,
+      "device_state": movementState,
+      if (note != null) "action_note": note,
     };
   }
 }

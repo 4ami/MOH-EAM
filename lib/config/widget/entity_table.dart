@@ -4,6 +4,8 @@ class EntityTable<T extends EntityModel> extends StatefulWidget {
   final List<T> entities;
   final List<String> tableCols;
   final bool showMore;
+  final bool edit;
+  final bool delete;
   final void Function(T entity)? onUpdate;
   final void Function(T entity)? onDelete;
   final void Function(T entity)? onView;
@@ -16,6 +18,8 @@ class EntityTable<T extends EntityModel> extends StatefulWidget {
     this.onDelete,
     this.onView,
     this.showMore = true,
+    this.edit = false,
+    this.delete = false,
   });
 
   @override
@@ -90,6 +94,21 @@ class _EntityTableState<T extends EntityModel> extends State<EntityTable<T>> {
         label: SelectableText(context.translate(key: _columns[i])),
       );
     });
+    if (widget.delete) {
+      cols = cols
+        ..add(
+          DataColumn(
+            label: SelectableText(context.translate(key: 'delete_action')),
+          ),
+        );
+    }
+    if (widget.edit) {
+      return cols..add(
+        DataColumn(
+          label: SelectableText(context.translate(key: 'edit_action')),
+        ),
+      );
+    }
     return widget.showMore
         ? (cols..add(
             DataColumn(
@@ -140,6 +159,15 @@ class _EntityTableState<T extends EntityModel> extends State<EntityTable<T>> {
       }
       return DataCell(SelectableText(cell.toString()));
     });
+
+    if (widget.delete) {
+      cells = cells..add(_deleteRecord(row, index));
+    }
+
+    if (widget.edit) {
+      return cells..add(_editRecord(row, index));
+    }
+
     return widget.showMore ? (cells..add(_showMore(row, index))) : cells;
   }
 
@@ -165,6 +193,56 @@ class _EntityTableState<T extends EntityModel> extends State<EntityTable<T>> {
                 },
                 extra: widget.entities[index],
               );
+            }
+            return;
+          }
+
+          context.showErrorSnackBar(
+            message: context.translate(key: 'insufficient_permissions'),
+          );
+        },
+      ),
+    );
+  }
+
+  DataCell _editRecord(Map<String, dynamic> entity, int index) {
+    return DataCell(
+      TextButton.icon(
+        label: Text(context.translate(key: 'edit_action')),
+        icon: const Icon(Icons.edit_note_rounded),
+        onPressed: () {
+          if (AuthorizationHelper.hasMinimumPermission(
+            context,
+            widget.entities[index].resourceName,
+            'UPDATE',
+          )) {
+            if (widget.onUpdate != null) {
+              widget.onUpdate?.call(widget.entities[index]);
+            }
+            return;
+          }
+
+          context.showErrorSnackBar(
+            message: context.translate(key: 'insufficient_permissions'),
+          );
+        },
+      ),
+    );
+  }
+  
+  DataCell _deleteRecord(Map<String, dynamic> entity, int index) {
+    return DataCell(
+      TextButton.icon(
+        label: Text(context.translate(key: 'delete_action')),
+        icon:  Icon(Icons.delete_rounded, color: context.error,),
+        onPressed: () {
+          if (AuthorizationHelper.hasMinimumPermission(
+            context,
+            widget.entities[index].resourceName,
+            'DELETE',
+          )) {
+            if (widget.onDelete != null) {
+              widget.onDelete?.call(widget.entities[index]);
             }
             return;
           }

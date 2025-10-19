@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:moh_eam/core/data/sources/remote/moh_api.dart';
 import 'package:moh_eam/core/data/sources/remote/moh_dio_client.dart';
 import 'package:moh_eam/features/entity/feature/departments/data/model/create_department.dart';
@@ -137,6 +138,24 @@ final class DepartmentRepoImplementation implements DepartmentRepo {
           .replaceAll('\$version', version)
           .replaceAll('\$lang', lang),
       parser: (json) => SearchInDepartments.fromJSON(json),
+    );
+  }
+
+
+  @override
+  Future<void> export({
+    required String token,
+    void Function(int recieved, int total)? onProgress,
+    void Function()? onError,
+    void Function()? onSuccess,
+  }) async {
+    await _client.download(
+      endpoint: MohAppConfig.api.exportDepartments.replaceAll('\$version', version),
+      token: token,
+      onProgress: onProgress,
+      options: Options(responseType: ResponseType.bytes),
+      onError: onError,
+      onSuccess: onSuccess
     );
   }
 }

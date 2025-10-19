@@ -70,6 +70,9 @@ abstract class APIConfig {
   String get deviceCREATE;
   String get allDevices;
   String get devicesStatistics;
+  String get exportDevices;
+  String get patchDevice;
+  String get deleteDevice;
 
   String get departmentsRoot;
   String get departmentTree;
@@ -79,6 +82,7 @@ abstract class APIConfig {
   String get departmentUPDATE;
   String get departmentDELETE;
   String get departmentSEARCH;
+  String get exportDepartments;
 
   String get usersFetch;
   String get userDetails;
@@ -86,10 +90,13 @@ abstract class APIConfig {
   String get userUPDATE;
   String get userDELETE;
   String get userStatistics;
+  String get exportUsers;
 
   String get globalSearch;
 
   String get profile;
+
+  String get logs;
 
   /// Load and prepare any necessary configuration resources.
   ///
@@ -213,6 +220,15 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get devicesStatistics => get(key: 'DEVICES.statistics');
 
   @override
+  String get exportDevices => get(key: 'DEVICES.EXPORT');
+
+  @override
+  String get patchDevice => get(key: 'DEVICES.PATCH');
+
+  @override
+  String get deleteDevice => get(key: "DEVICES.DELETE");
+
+  @override
   String get departmentsRoot => get(key: 'DEPARTMENTS.roots');
 
   @override
@@ -237,6 +253,9 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get departmentSEARCH => get(key: 'DEPARTMENTS.search');
 
   @override
+  String get exportDepartments => get(key: 'DEPARTMENTS.EXPORT');
+
+  @override
   String get usersFetch => get(key: 'USERS.FETCH_USERS');
 
   @override
@@ -255,10 +274,16 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
   String get userStatistics => get(key: 'USERS.STATS');
 
   @override
+  String get exportUsers => get(key: 'USERS.EXPORT');
+
+  @override
   String get globalSearch => get(key: 'GLOBAL_SEARCH');
 
   @override
   String get profile => get(key: 'PROFILE');
+
+  @override
+  String get logs => get(key: "LOGS");
 }
 
 /// Production environment implementation of [APIConfig].
@@ -268,94 +293,163 @@ final class _$Development with _$EnvironementMixin implements APIConfig {
 ///
 /// This config avoids runtime asset loading entirely.
 final class _$Production implements APIConfig {
-  _$Production._();
+  const _$Production._();
 
   /// Singleton access to the production config instance.
   static final _$Production _instance = _$Production._();
   static _$Production get instance => _instance;
 
-  String get apiBaseUril => String.fromEnvironment('HOST');
+  static const String _apiBaseUrl = String.fromEnvironment('API_URL');
+  static const String _authToken = String.fromEnvironment('AUTH_TOKEN');
+  static const String _authentication = String.fromEnvironment(
+    'AUTHENTICATION',
+  );
+  static const String _version = String.fromEnvironment('VERSION');
+  static const String _roles = String.fromEnvironment('ROLES');
+  static const String _roleDELETE = String.fromEnvironment('ROLE_DELETE');
+  static const String _deviceCREATE = String.fromEnvironment('DEVICE_CREATE');
+  static const String _allDevices = String.fromEnvironment('DEVICES_ALL');
+  static const String _devicesStatistics = String.fromEnvironment(
+    'DEVICES_STATISTICS',
+  );
+  static const String _exportDevices = String.fromEnvironment('EXPORT_DEVICES');
+  static const String _patchDevice = String.fromEnvironment('PATCH_DEVICE');
+  static const String _deleteDevice = String.fromEnvironment('DELETE_DEVICE');
+  static const String _departmentsRoot = String.fromEnvironment(
+    'DEPARTMENT_ROOTS',
+  );
+  static const String _departmentTree = String.fromEnvironment(
+    'DEPARTMENT_TREE',
+  );
+  static const String _departmentSubtree = String.fromEnvironment(
+    'DEPARTMENT_SUBTREE',
+  );
+  static const String _departmentChildren = String.fromEnvironment(
+    'DEPARTMENT_CHILDREN',
+  );
+  static const String _departmentCREATE = String.fromEnvironment(
+    'DEPARTMENT_CREATE',
+  );
+  static const String _departmentUPDATE = String.fromEnvironment(
+    'DEPARTMENT_UPDATE',
+  );
+  static const String _departmentDELETE = String.fromEnvironment(
+    'DEPARTMENT_DELETE',
+  );
+  static const String _departmentSEARCH = String.fromEnvironment(
+    'DEPARTMENT_SEARCH',
+  );
+  static const String _exportDepartments = String.fromEnvironment(
+    'EXPORT_DEPARTMENTS',
+  );
+  static const String _usersFetch = String.fromEnvironment('FETCH_USERS');
+  static const String _userDetails = String.fromEnvironment('USER_DETAILS');
+  static const String _userCREATE = String.fromEnvironment('CREATE_USER');
+  static const String _userUPDATE = String.fromEnvironment('UPDATE_USER');
+  static const String _userDELETE = String.fromEnvironment('DELETE_USER');
+  static const String _userStatistics = String.fromEnvironment(
+    'USER_STATISTICS',
+  );
+  static const String _exportUsers = String.fromEnvironment('EXPORT_USERS');
+  static const String _globalSearch = String.fromEnvironment('GLOBAL_SEARCH');
+  static const String _profile = String.fromEnvironment('PROFILE');
+  static const String _logs = String.fromEnvironment('LOGS');
 
   @override
-  Future<void> init() {
-    throw 'Production Environment Doesn\'t Requeire \'Initialization\'';
-  }
+  Future<void> init() async {}
 
   @override
-  String get apiBaseUrl => String.fromEnvironment('API_URL');
+  String get apiBaseUrl => _apiBaseUrl;
 
   @override
-  String get authToken => String.fromEnvironment('AUTH_TOKEN');
+  String get authToken => _authToken;
 
   @override
-  String get authentication => String.fromEnvironment('AUTHENTICATION');
+  String get authentication => _authentication;
 
   @override
-  String get version => String.fromEnvironment('VERSION');
+  String get version => _version;
 
   @override
-  String get roles => String.fromEnvironment('ROLES');
+  String get roles => _roles;
 
   @override
-  String get roleDELETE => String.fromEnvironment('ROLE_DELETE');
+  String get roleDELETE => _roleDELETE;
 
   @override
-  String get deviceCREATE => String.fromEnvironment('DEVICE_CREATE');
+  String get deviceCREATE => _deviceCREATE;
 
   @override
-  String get allDevices => String.fromEnvironment('DEVICES_ALL');
+  String get allDevices => _allDevices;
 
   @override
-  String get devicesStatistics => String.fromEnvironment('DEVICES_STATISTICS');
+  String get patchDevice => _patchDevice;
 
   @override
-  String get departmentsRoot => String.fromEnvironment('DEPARTMENT_ROOTS');
+  String get deleteDevice => _deleteDevice;
 
   @override
-  String get departmentTree => String.fromEnvironment('DEPARTMENT_TREE');
+  String get exportDevices => _exportDevices;
 
   @override
-  String get departmentSubtree => String.fromEnvironment('DEPARTMENT_SUBTREE');
+  String get devicesStatistics => _devicesStatistics;
 
   @override
-  String get departmentChildren =>
-      String.fromEnvironment('DEPARTMENT_CHILDREN');
+  String get departmentsRoot => _departmentsRoot;
 
   @override
-  String get departmentCREATE => String.fromEnvironment('DEPARTMENT_CREATE');
+  String get departmentTree => _departmentTree;
 
   @override
-  String get departmentUPDATE => String.fromEnvironment('DEPARTMENT_UPDATE');
+  String get departmentSubtree => _departmentSubtree;
 
   @override
-  String get departmentDELETE => String.fromEnvironment('DEPARTMENT_DELETE');
+  String get departmentChildren => _departmentChildren;
 
   @override
-  String get departmentSEARCH => String.fromEnvironment('DEPARTMENT_SEARCH');
+  String get departmentCREATE => _departmentCREATE;
 
   @override
-  String get usersFetch => String.fromEnvironment('FETCH_USERS');
+  String get departmentUPDATE => _departmentUPDATE;
 
   @override
-  String get userDetails => String.fromEnvironment('USER_DETAILS');
+  String get departmentDELETE => _departmentDELETE;
 
   @override
-  String get userCREATE => String.fromEnvironment('CREATE_USER');
+  String get departmentSEARCH => _departmentSEARCH;
 
   @override
-  String get userUPDATE => String.fromEnvironment('UPDATE_USER');
+  String get exportDepartments => _exportDepartments;
 
   @override
-  String get userDELETE => String.fromEnvironment('DELETE_USER');
+  String get usersFetch => _usersFetch;
 
   @override
-  String get userStatistics => String.fromEnvironment('USER_STATISTICS');
+  String get userDetails => _userDetails;
 
   @override
-  String get globalSearch => String.fromEnvironment('GLOBAL_SEARCH');
+  String get userCREATE => _userCREATE;
 
   @override
-  String get profile => String.fromEnvironment('PROFILE');
+  String get userUPDATE => _userUPDATE;
+
+  @override
+  String get userDELETE => _userDELETE;
+
+  @override
+  String get userStatistics => _userStatistics;
+
+  @override
+  String get exportUsers => _exportUsers;
+
+  @override
+  String get globalSearch => _globalSearch;
+
+  @override
+  String get profile => _profile;
+
+  @override
+  String get logs => _logs;
 }
 
 /// Utility to determine the active [Environment] at runtime.

@@ -244,6 +244,8 @@
     "device_success_message_create": "تم إنشاء الجهاز الجديد بنجاح.",
     "device_success_title_delete": "تم حذف الجهاز بنجاح",
     "device_success_message_delete": "تم حذف الجهاز بنجاح.",
+    "device_success_title_update": "تم التحديث بنجاح",
+    "device_success_message_update": "تم تحديث بيانات الجهاز بنجاح.",
 
     "device_failed_title_general": "فشل في تنفيذ العملية",
     "device_failed_message_general": "فشلت عملية تنفيذ الإجراء المتعلق بالجهاز بسبب: $reason",
@@ -251,6 +253,8 @@
     "device_failed_message_create": "فشلت عملية إنشاء الجهاز بسبب: $reason",
     "device_failed_title_delete": "فشل في حذف الجهاز",
     "device_failed_message_delete": "فشلت عملية حذف الجهاز بسبب: $reason",
+    "device_failed_title_update": "فشل التحديث",
+    "device_failed_message_update": "تعذّر تحديث بيانات الجهاز بسبب: $reason",
 
     "assign_to_user_hint": "أدخل اسم المستخدم للتحقق",
     "user_information": "معلومات المستخدم",
@@ -327,5 +331,48 @@
     "profile_failed_title_general": "العملية لم تتم",
     "profile_failed_message_general": "تعذّر تنفيذ المطلوب بخصوص الملف الشخصي بسبب: $reason",
     "profile_failed_title_fetch": "العملية لم تتم",
-    "profile_failed_message_fetch": "تعذّر جلب بيانات الملف الشخصي بسبب: $reason"
+    "profile_failed_message_fetch": "تعذّر جلب بيانات الملف الشخصي بسبب: $reason",
+
+    "export_devices": "تنزيل الأجهزة",
+    "export_departments": "تنزيل الأقسام",
+    "export_users": "تنزيل المستخدمين",
+
+    "export_success_title": "تم التنزيل بنجاح",
+    "export_success_description": "تم تنزيل الملف بنجاح.",
+    "export_failed_title": "فشل التنزيل",
+    "export_failed_description": "حدث خطأ أثناء تنزيل الملف. الرجاء المحاولة مرة أخرى.",
+
+    "404_invalid_username_assignment": "تعذّر إتمام تعيين اسم المستخدم. يرجى التحقق من صحة اسم المستخدم والمحاولة مجددًا.",
+    "404_invalid_device_request": "تعذّر معالجة الجهاز المطلوب. يرجى التحقق والمحاولة مرة أخرى.",
+
+    "update_device_title": "تعديل بيانات الجهاز",
+    "update_device_btn": "تعديل الجهاز",
+
+    "stored": "مخزن",
+    "returned": "مرجع",
+    "assigned": "مسند",
+    "unassigned": "غير مسند",
+    "movement_note": "ملاحظة عن العملية",
+    "note_invalid_fromat": "صيغة الملاحظة غير صحيح",
+    "movement_state_label": "حدد نوع العملية (لتصنيف العملية في السجل)",
+
+    "movement_success_title_general": "تمت العملية بنجاح",
+    "movement_success_message_general": "تم تنفيذ العملية المتعلقة بسجل حركة الأجهزة بنجاح.",
+    "movement_fetch_success_title": "تم جلب السجلات بنجاح",
+    "movement_fetch_success_message": "تم جلب سجلات حركة الأجهزة بنجاح من النظام.",
+
+    "movement_failed_title_general": "فشلت العملية",
+    "movement_failed_message_general": "تعذّر تنفيذ المطلوب بخصوص سجل حركة الأجهزة بسبب: $reason",
+    "movement_failed_title_fetch": "العملية لم تتم",
+    "movement_failed_message_fetch": "تعذّر جلب سجلات حركة الأجهزة بسبب: $reason",
+
+    "movement_state": "حالة الحركة",
+    "action_by": "منفذ العملية",
+    "target_user": "المستخدم المستفيد",
+    "note": "الملاحظة",
+    "logged_at": "وقت القيد",
+
+    "movement_logs": "سجل حركة الأجهزة",
+    "movement_card_title": "بطاقة الحركة",
+    "reset_filters": "إعادة تعيين فلاتر البحث"
 }

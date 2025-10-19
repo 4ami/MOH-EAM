@@ -2,13 +2,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moh_eam/config/logging/logger.dart';
 import 'package:moh_eam/core/data/model/api_error.dart';
 import 'package:moh_eam/features/entity/feature/devices/data/model/create_device.dart';
+import 'package:moh_eam/features/entity/feature/devices/data/model/delete_device.dart';
 import 'package:moh_eam/features/entity/feature/devices/data/model/fetch.dart';
+import 'package:moh_eam/features/entity/feature/devices/data/model/patch_device.dart';
 import 'package:moh_eam/features/entity/feature/devices/data/repositories/device_repo_imp.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/entity/device.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/entity/filters.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/repositories/device_repo.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/services/create.dart';
+import 'package:moh_eam/features/entity/feature/devices/domain/services/delete.dart';
 import 'package:moh_eam/features/entity/feature/devices/domain/services/fetch.dart';
+import 'package:moh_eam/features/entity/feature/devices/domain/services/patch.dart';
 
 part 'state.dart';
 part 'event.dart';
@@ -19,6 +23,8 @@ final class DeviceBloc extends Bloc<DeviceEvents, DeviceState> {
     _updateFilters();
     _fetch();
     _create();
+    _patch();
+    _delete();
   }
 
   String handleError(dynamic e) {
@@ -107,6 +113,78 @@ final class DeviceBloc extends Bloc<DeviceEvents, DeviceState> {
 
       Logger.d('Device created successfully', tag: 'DeviceBloc');
       emit(state.copyWith(event: CreateSuccessEvent()));
+    });
+  }
+
+  void _patch() {
+    PatchDeviceResponse? then(PatchDeviceResponse res) {
+      if (res.code != 200) throw res.messageKey;
+      return res;
+    }
+
+    on<PatchDeviceEvent>((event, emit) async {
+      emit(state.copyWith(event: DeviceLoadingEvent()));
+      Logger.d(
+        'Start patching device [${event.deviceRequest.device.id}]',
+        tag: 'DeviceBloc',
+      );
+
+      String key = '';
+
+      PatchDeviceService service = PatchDeviceService(_repo);
+
+      PatchDeviceResponse? res =
+          await service(
+            token: event.token,
+            req: event.deviceRequest,
+          ).then(then).catchError((e) {
+            key = handleError(e);
+            return null;
+          });
+
+      Logger.i('Patch device response received', tag: 'DeviceBloc');
+
+      if (key.isNotEmpty || res == null) {
+        emit(state.copyWith(event: PatchFailedEvent(reason: key)));
+        Logger.e('Patch device failed with key: $key', tag: 'DeviceBloc');
+        return;
+      }
+
+      Logger.d('Device patched successfully', tag: 'DeviceBloc');
+      emit(state.copyWith(event: PatchSuccessEvent()));
+    });
+  }
+
+  void _delete() {
+    DeleteDeviceResponse? then(DeleteDeviceResponse res) {
+      if (res.code != 200) throw res.messageKey;
+      return res;
+    }
+
+    on<DeleteDeviceEvent>((event, emit) async {
+      emit(state.copyWith(event: DeviceLoadingEvent()));
+      Logger.d('Start deleting device [${event.id}]', tag: 'DeviceBloc');
+
+      String key = '';
+
+      DeleteDeviceService service = DeleteDeviceService(_repo);
+
+      DeleteDeviceResponse? res =
+          await service(token: event.token, id: event.id).then(then).catchError(
+            (e) {
+              key = handleError(e);
+              return null;
+            },
+          );
+
+      if (key.isNotEmpty || res == null) {
+        emit(state.copyWith(event: DeleteFailedEvent(reason: key)));
+        Logger.e('Deleting device failed with key: $key', tag: 'DeviceBloc');
+        return;
+      }
+
+      Logger.d('Device deleted successfully', tag: 'DeviceBloc');
+      emit(state.copyWith(event: DeleteSuccessEvent()));
     });
   }
 }
